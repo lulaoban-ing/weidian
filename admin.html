@@ -128,6 +128,7 @@ tr:hover td{background:#fafafa}
         <button class="tab-btn" onclick="showTab('add')" id="t-add">＋ 新增条目</button>
         <button class="tab-btn" onclick="showTab('history')" id="t-history">🕐 版本历史</button>
         <button class="tab-btn" onclick="showTab('users')" id="t-users">👥 用户管理</button>
+        <button class="tab-btn" onclick="showTab('updates')" id="t-updates">📢 流程更新</button>
       </div>
       <div id="tab-content"></div>
     </div>
@@ -248,7 +249,7 @@ function showTab(tab) {
   _currentTab = tab;
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('t-'+tab).classList.add('active');
-  ({ knowledge: renderKnowledge, add: renderAdd, history: renderHistory, users: renderUsers })[tab]?.();
+  ({ knowledge: renderKnowledge, add: renderAdd, history: renderHistory, users: renderUsers, updates: renderUpdatesTab })[tab]?.();
 }
 
 // ── Knowledge Tab ─────────────────────────────────────────
@@ -634,6 +635,46 @@ function deleteUser(username) {
   if (!confirm(`确认删除用户「${username}」？`)) return;
   saveAccounts(getAccounts().filter(a=>a.username!==username));
   renderUsers();
+}
+
+// ── Updates Tab ───────────────────────────────────────────
+function renderUpdatesTab() {
+  const items = JSON.parse(localStorage.getItem('kb_updates') || '[]');
+  document.getElementById('tab-content').innerHTML = `
+    <div style="margin-bottom:16px">
+      <div class="form-group"><label>标题</label><input id="upd-title" placeholder="流程更新标题"></div>
+      <div class="form-group"><label>图片</label><input type="file" id="upd-file" accept="image/*"></div>
+      <button class="btn btn-primary" onclick="submitUpdate()">上传发布</button>
+      <span id="upd-err" style="color:var(--danger);font-size:12px;margin-left:8px"></span>
+    </div>
+    <div id="upd-list">${items.length ? items.map((u,i)=>`
+      <div style="display:flex;align-items:center;gap:12px;padding:10px;border:1px solid var(--border);border-radius:8px;margin-bottom:8px">
+        <img src="${u.img}" style="width:80px;height:50px;object-fit:cover;border-radius:4px">
+        <div style="flex:1"><div style="font-weight:500">${u.title}</div><div style="font-size:11px;color:#999">${u.time}</div></div>
+        <button class="btn btn-default btn-sm" onclick="deleteUpdate(${i})">删除</button>
+      </div>`).join('') : '<div style="color:#999;font-size:13px">暂无内容</div>'}</div>`;
+}
+
+function submitUpdate() {
+  const title = document.getElementById('upd-title').value.trim();
+  const file  = document.getElementById('upd-file').files[0];
+  const errEl = document.getElementById('upd-err');
+  if (!title || !file) { errEl.textContent = '请填写标题并选择图片'; return; }
+  const reader = new FileReader();
+  reader.onload = e => {
+    const items = JSON.parse(localStorage.getItem('kb_updates') || '[]');
+    items.unshift({ title, img: e.target.result, time: new Date().toLocaleDateString('zh-CN') });
+    localStorage.setItem('kb_updates', JSON.stringify(items));
+    renderUpdatesTab();
+  };
+  reader.readAsDataURL(file);
+}
+
+function deleteUpdate(idx) {
+  const items = JSON.parse(localStorage.getItem('kb_updates') || '[]');
+  items.splice(idx, 1);
+  localStorage.setItem('kb_updates', JSON.stringify(items));
+  renderUpdatesTab();
 }
 
 function doLogout() {

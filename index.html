@@ -215,6 +215,18 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei
 .hf-cat{font-size:11px;color:var(--text-secondary);margin-bottom:4px}
 .hf-step{font-size:11px;color:var(--primary);background:var(--primary-light);padding:3px 8px;border-radius:4px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
+/* ── Updates Slider ───────────────────────────── */
+.updates-section{margin-bottom:24px}
+.updates-slider{overflow:hidden;border-radius:10px;background:#fff;border:1px solid var(--border);position:relative}
+.slide-track{display:flex;gap:12px;padding:12px;animation:slideScroll 20s linear infinite}
+.slide-track:hover{animation-play-state:paused}
+.slide-item{flex-shrink:0;width:280px;cursor:pointer;border-radius:8px;overflow:hidden;border:1px solid var(--border)}
+.slide-item img{width:100%;height:160px;object-fit:cover;display:block}
+.slide-caption{padding:8px 10px;font-size:12px;font-weight:500;color:var(--text);background:#fff}
+.slide-time{font-size:11px;color:var(--text-secondary)}
+.updates-empty{padding:32px;text-align:center;color:var(--text-secondary);font-size:13px}
+@keyframes slideScroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+
 /* ── Scrollbar ────────────────────────────────── */
 ::-webkit-scrollbar{width:4px}
 ::-webkit-scrollbar-track{background:transparent}
