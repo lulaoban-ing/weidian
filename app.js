@@ -80,8 +80,6 @@ function showHome() {
   const total = allCats.reduce((n,c)=>n+c.scenarios.length,0);
   const high  = allCats.reduce((n,c)=>n+c.scenarios.filter(s=>s.risk==='high').length,0);
 
-  const filteredCats = getFilteredCategories();
-
   const moduleCards = state.activeModule === 'all'
     ? data.modules.map(mod => {
         const cnt = mod.categories.reduce((n,c)=>n+c.scenarios.length,0);
@@ -132,17 +130,7 @@ function showHome() {
     ${moduleCards ? `<div class="module-grid">${moduleCards}</div>` : ''}
     ${highFreqHtml}
     <div class="page-header" style="margin-top:8px"><h2>📢 近期流程更新</h2><p style="font-size:12px;color:var(--text-secondary)">管理员发布的最新流程变更</p></div>
-    ${renderUpdates()}
-    <div class="page-header" style="margin-top:16px"><h2>${state.activeModule==='all'?'全部分类':(data.modules.find(m=>m.id===state.activeModule)?.name||'')}</h2></div>
-    <div class="card-grid">
-      ${filteredCats.map(cat=>`
-        <div class="cat-card" onclick="showCategory('${cat.id}')">
-          <div class="card-tag tag-${cat.color||'default'}">${cat.icon} ${cat.name}</div>
-          <h3>${cat.name}</h3>
-          <p>${cat.desc}</p>
-          <div class="cc-footer"><span class="cc-count">${cat.scenarios.length} 个场景</span></div>
-        </div>`).join('')}
-    </div>`;
+    ${renderUpdates()}`;
   renderNav();
 }
 
