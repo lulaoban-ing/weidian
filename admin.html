@@ -6,11 +6,9 @@
 <title>后台管理 · 微店24</title>
 <style>
 *{box-sizing:border-box;margin:0;padding:0}
-:root{--primary:#5eb3ff;--primary-dark:#2e8de0;--primary-light:#f0f7ff;--danger:#ff4d4f;--warning:#faad14;--success:#52c41a;--text:#1a1a1a;--text-secondary:#666;--border:#e8e8e8;--bg:#f8fbfe;--sidebar-w:240px}
+:root{--primary:#e63946;--primary-dark:#c1121f;--primary-light:#fff0f0;--danger:#ff4d4f;--warning:#faad14;--success:#52c41a;--text:#1a1a1a;--text-secondary:#666;--border:#e8e8e8;--bg:#f8f8f8;--sidebar-w:240px}
 body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei',sans-serif;background:var(--bg);color:var(--text);font-size:14px}
 #app{display:flex;height:100vh;overflow:hidden}
-
-/* Sidebar */
 #sidebar{width:var(--sidebar-w);background:#fff;border-right:1px solid var(--border);display:flex;flex-direction:column;flex-shrink:0}
 .sb-header{padding:14px 16px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
 .sb-logo{width:28px;height:28px;background:linear-gradient(135deg,var(--primary),var(--primary-dark));border-radius:6px;display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:700;color:#fff;flex-shrink:0}
@@ -19,20 +17,17 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei
 .sb-search input{width:100%;padding:6px 10px;border:1px solid var(--border);border-radius:6px;font-size:12px;outline:none;background:var(--bg)}
 .sb-search input:focus{border-color:var(--primary)}
 .sb-all{padding:8px 14px;font-size:12px;font-weight:600;color:var(--text-secondary);display:flex;justify-content:space-between;cursor:pointer;border-bottom:1px solid var(--border)}
-.sb-all:hover{background:var(--bg)}
-.sb-all.active{color:var(--primary)}
+.sb-all:hover{background:var(--bg)}.sb-all.active{color:var(--primary)}
+.sb-mod{padding:6px 14px;font-size:11px;font-weight:700;color:var(--text-secondary);background:var(--bg);border-bottom:1px solid var(--border);letter-spacing:.5px}
 #sb-tree{flex:1;overflow-y:auto;padding:4px 0}
-.sb-cat{cursor:pointer;padding:7px 14px;font-size:12px;color:var(--text-secondary);display:flex;justify-content:space-between;align-items:center}
+.sb-cat{cursor:pointer;padding:6px 14px 6px 22px;font-size:12px;color:var(--text-secondary);display:flex;justify-content:space-between;align-items:center}
 .sb-cat:hover{background:var(--bg);color:var(--text)}
 .sb-cat.active{background:var(--primary-light);color:var(--primary);font-weight:500}
 .sb-cat .cnt{background:var(--bg);border-radius:8px;padding:1px 7px;font-size:11px}
-.sb-cat.active .cnt{background:var(--primary-light)}
-
-/* Main */
 #main{flex:1;display:flex;flex-direction:column;overflow:hidden}
 #topbar{background:#fff;border-bottom:1px solid var(--border);padding:0 20px;height:50px;display:flex;align-items:center;gap:12px;flex-shrink:0}
 #topbar h2{font-size:15px;font-weight:700;flex:1}
-.role-badge{padding:3px 10px;border-radius:10px;font-size:11px;font-weight:600;background:#fff1f0;color:var(--danger)}
+.role-badge{padding:3px 10px;border-radius:10px;font-size:11px;font-weight:600;background:var(--primary-light);color:var(--primary)}
 .btn{padding:5px 12px;border-radius:6px;border:none;cursor:pointer;font-size:12px;font-weight:500;transition:.15s}
 .btn-default{background:#fff;color:var(--text);border:1px solid var(--border)}
 .btn-default:hover{border-color:var(--primary);color:var(--primary)}
@@ -40,19 +35,14 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei
 .btn-primary:hover{background:var(--primary-dark)}
 .btn-danger{background:var(--danger);color:#fff;border:none}
 .btn-danger:hover{opacity:.85}
+.btn-success{background:var(--success);color:#fff;border:none}
+.btn-success:hover{opacity:.85}
 .btn-sm{padding:3px 10px;font-size:12px}
-
 #content{flex:1;overflow-y:auto;padding:20px 24px}
-.page-title{font-size:18px;font-weight:700;margin-bottom:4px}
-.page-sub{font-size:12px;color:var(--text-secondary);margin-bottom:16px}
-
-/* Tabs */
-.tabs-bar{display:flex;border-bottom:2px solid var(--border);margin-bottom:20px;gap:0}
+.tabs-bar{display:flex;border-bottom:2px solid var(--border);margin-bottom:20px}
 .tab-btn{padding:10px 20px;font-size:13px;font-weight:500;color:var(--text-secondary);cursor:pointer;border:none;background:none;border-bottom:2px solid transparent;margin-bottom:-2px;transition:.15s}
 .tab-btn:hover{color:var(--text)}
 .tab-btn.active{color:var(--primary);border-bottom-color:var(--primary);font-weight:600}
-
-/* Table */
 .table-toolbar{display:flex;gap:10px;margin-bottom:14px;align-items:center}
 .table-toolbar input{flex:1;padding:8px 12px;border:1px solid var(--border);border-radius:6px;font-size:13px;outline:none}
 .table-toolbar input:focus{border-color:var(--primary)}
@@ -60,35 +50,43 @@ table{width:100%;border-collapse:collapse;background:#fff;border-radius:8px;over
 th{background:var(--bg);padding:10px 14px;text-align:left;font-size:12px;font-weight:600;color:var(--text-secondary);border-bottom:1px solid var(--border)}
 td{padding:10px 14px;font-size:13px;border-bottom:1px solid var(--border);vertical-align:middle}
 tr:last-child td{border-bottom:none}
-tr:hover td{background:#fafcff}
+tr:hover td{background:#fafafa}
 .td-ops{display:flex;gap:6px}
-.risk-dot{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:4px}
-.risk-high{background:var(--danger)}.risk-mid{background:var(--warning)}.risk-low{background:var(--success)}
-
-/* Form */
-.form-card{background:#fff;border-radius:10px;border:1px solid var(--border);padding:20px;max-width:700px}
+.risk-dot{display:inline-block;width:6px;height:6px;border-radius:50%;margin-right:4px;vertical-align:middle}
+.dot-high{background:var(--danger)}.dot-mid{background:var(--warning)}.dot-low{background:var(--success)}
+.form-card{background:#fff;border-radius:10px;border:1px solid var(--border);padding:20px;max-width:720px}
 .form-group{margin-bottom:14px}
 .form-group label{display:block;font-size:12px;font-weight:600;margin-bottom:5px;color:var(--text)}
 .form-group input,.form-group textarea,.form-group select{width:100%;padding:8px 10px;border:1px solid var(--border);border-radius:6px;font-size:13px;outline:none;font-family:inherit}
 .form-group input:focus,.form-group textarea:focus,.form-group select:focus{border-color:var(--primary)}
 .form-group textarea{min-height:80px;resize:vertical;line-height:1.6}
-.form-hint{font-size:11px;color:var(--text-secondary);margin-top:3px}
+.form-hint{font-size:11px;color:var(--text-secondary);font-weight:400;margin-left:4px}
 .form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
-
-/* History */
-.history-list{display:flex;flex-direction:column;gap:8px}
-.history-item{background:#fff;border-radius:8px;border:1px solid var(--border);padding:12px 16px;display:flex;align-items:center;gap:12px}
-.history-time{font-size:12px;color:var(--text-secondary);flex-shrink:0;width:160px}
-.history-desc{font-size:13px;flex:1}
-.history-tag{padding:2px 8px;border-radius:8px;font-size:11px;background:var(--primary-light);color:var(--primary-dark)}
-
-/* Users */
-.user-table-wrap{background:#fff;border-radius:8px;border:1px solid var(--border);overflow:hidden}
+.form-row3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:12px}
+.history-list{display:flex;flex-direction:column;gap:10px}
+.history-item{background:#fff;border-radius:8px;border:1px solid var(--border);overflow:hidden}
+.history-header{display:flex;align-items:center;gap:12px;padding:10px 16px;cursor:pointer;user-select:none}
+.history-header:hover{background:var(--bg)}
+.history-time{font-size:12px;color:var(--text-secondary);flex-shrink:0;width:150px}
+.history-desc{font-size:13px;font-weight:500;flex:1}
+.history-op{padding:2px 8px;border-radius:8px;font-size:11px;font-weight:600;flex-shrink:0}
+.op-add{background:#f6ffed;color:#389e0d}
+.op-edit{background:#e6f4ff;color:#1677ff}
+.op-del{background:#fff1f0;color:var(--danger)}
+.history-user{font-size:11px;color:var(--text-secondary);flex-shrink:0}
+.history-detail{display:none;padding:12px 16px;border-top:1px solid var(--border);background:#fafafa}
+.history-detail.open{display:block}
+.diff-table{width:100%;border-collapse:collapse;font-size:12px}
+.diff-table th{background:#f0f0f0;padding:6px 10px;text-align:left;font-weight:600;color:var(--text-secondary)}
+.diff-table td{padding:6px 10px;border-top:1px solid var(--border);vertical-align:top;line-height:1.6}
+.diff-old{background:#fff1f0;color:#c1121f}
+.diff-new{background:#f6ffed;color:#389e0d}
+.diff-changed{background:#fffbe6;color:#7c5800;font-weight:500}
+.user-toolbar{display:flex;gap:10px;margin-bottom:14px;align-items:center;justify-content:space-between}
 .pending-badge{padding:2px 8px;border-radius:8px;font-size:11px;background:#fffbe6;color:#d48806}
 .approved-badge{padding:2px 8px;border-radius:8px;font-size:11px;background:#f6ffed;color:#389e0d}
-.admin-badge{padding:2px 8px;border-radius:8px;font-size:11px;background:var(--primary-light);color:var(--primary-dark)}
-
-/* Modal */
+.admin-badge{padding:2px 8px;border-radius:8px;font-size:11px;background:var(--primary-light);color:var(--primary)}
+.guest-badge{padding:2px 8px;border-radius:8px;font-size:11px;background:#f5f5f5;color:#999}
 #modal-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,.5);z-index:1000;align-items:center;justify-content:center}
 #modal-overlay.show{display:flex}
 .modal{background:#fff;border-radius:12px;width:90%;max-width:680px;max-height:90vh;display:flex;flex-direction:column}
@@ -96,8 +94,9 @@ tr:hover td{background:#fafcff}
 .modal-header h3{font-size:15px;font-weight:700}
 .modal-body{flex:1;overflow-y:auto;padding:18px}
 .modal-footer{padding:10px 18px;border-top:1px solid var(--border);display:flex;justify-content:flex-end;gap:8px}
-
 .empty{text-align:center;padding:40px;color:var(--text-secondary);font-size:13px}
+.tag-row{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+.tag{padding:2px 8px;border-radius:8px;font-size:11px;background:var(--bg);color:var(--text-secondary)}
 </style>
 </head>
 <body>
@@ -110,13 +109,12 @@ tr:hover td{background:#fafcff}
     <div class="sb-search">
       <input type="text" id="sb-filter" placeholder="搜索分类..." oninput="filterSidebar(this.value)">
     </div>
-    <div class="sb-all active" id="sb-all" onclick="setSbFilter(null)">
+    <div class="sb-all active" id="sb-all" onclick="setSbFilter(null,null)">
       <span>全部知识</span>
       <span class="cnt" id="sb-total">0</span>
     </div>
     <div id="sb-tree"></div>
   </div>
-
   <div id="main">
     <div id="topbar">
       <h2>后台管理</h2>
@@ -139,11 +137,11 @@ tr:hover td{background:#fafcff}
 <div id="modal-overlay">
   <div class="modal">
     <div class="modal-header">
-      <h3>编辑场景</h3>
+      <h3 id="modal-title">编辑场景</h3>
       <button class="btn btn-default btn-sm" onclick="closeModal()">✕ 关闭</button>
     </div>
     <div class="modal-body" id="modal-body"></div>
-    <div class="modal-footer">
+    <div class="modal-footer" id="modal-footer">
       <button class="btn btn-default" onclick="closeModal()">取消</button>
       <button class="btn btn-primary" onclick="saveEdit()">保存</button>
     </div>
@@ -152,11 +150,10 @@ tr:hover td{background:#fafcff}
 
 <script src="data.js"></script>
 <script>
-// ── Auth ──────────────────────────────────────────────────
 const _u = (()=>{ try{ return JSON.parse(sessionStorage.getItem('kb_user')); }catch(e){return null;} })();
 if (!_u || _u.role !== 'admin') { window.location.replace('login.html'); }
 
-const MODULE_NAMES = { 'sop-scenarios':'全场景 SOP', 'exception-handling':'异常处理', 'ai-watching':'AI 值守' };
+let _sbModFilter = null;
 let _sbCatFilter = null;
 let _currentTab = 'knowledge';
 let _tableFilter = '';
@@ -168,12 +165,14 @@ function getData() {
   return KB_DATA;
 }
 
-function saveData(data, desc) {
+function saveData(data, histEntry) {
   localStorage.setItem('kb_data', JSON.stringify(data));
-  const hist = getHistory();
-  hist.unshift({ time: new Date().toISOString(), desc: desc || '手动保存', user: _u.name });
-  if (hist.length > 50) hist.length = 50;
-  localStorage.setItem('kb_history', JSON.stringify(hist));
+  if (histEntry) {
+    const hist = getHistory();
+    hist.unshift({ ...histEntry, time: new Date().toISOString(), user: _u.name });
+    if (hist.length > 200) hist.length = 200;
+    localStorage.setItem('kb_history', JSON.stringify(hist));
+  }
 }
 
 function getHistory() {
@@ -186,25 +185,57 @@ function getAccounts() {
 
 function saveAccounts(a) { localStorage.setItem('kb_accounts', JSON.stringify(a)); }
 
+function findCat(data, catId) {
+  for (const mod of data.modules) {
+    const cat = mod.categories.find(c => c.id === catId);
+    if (cat) return { mod, cat };
+  }
+  return {};
+}
+
+// ── Diff helper ───────────────────────────────────────────
+function diffScenario(before, after) {
+  const fields = [
+    { key: 'title', label: '标题' },
+    { key: 'risk', label: '风险等级', fmt: v => ({high:'高风险',mid:'中风险',low:'低风险'}[v]||v) },
+    { key: 'keywords', label: '关键词', fmt: v => (v||[]).join('，') },
+    { key: 'flow', label: '处理流程', fmt: v => (v||[]).map(f=>f.step).join(' → ') },
+    { key: 'scripts', label: '参考话术', fmt: v => (v||[]).map(s=>s.label+'：'+s.text).join(' | ') },
+    { key: 'notes', label: '注意事项' },
+  ];
+  return fields.map(f => {
+    const fmt = f.fmt || (v => v || '');
+    const bv = fmt(before[f.key]);
+    const av = fmt(after[f.key]);
+    if (bv === av) return null;
+    return { label: f.label, before: bv, after: av };
+  }).filter(Boolean);
+}
+
 // ── Sidebar ───────────────────────────────────────────────
 function renderSidebar(filter) {
   const data = getData();
-  let total = 0;
   const tree = document.getElementById('sb-tree');
-  tree.innerHTML = data.categories
-    .filter(c => !filter || c.name.includes(filter))
-    .map(c => {
+  let html = '';
+  let total = 0;
+  data.modules.forEach(mod => {
+    const cats = mod.categories.filter(c => !filter || c.name.includes(filter));
+    if (!cats.length) return;
+    html += `<div class="sb-mod">${mod.icon} ${mod.name}</div>`;
+    cats.forEach(c => {
       total += c.scenarios.length;
-      return `<div class="sb-cat ${_sbCatFilter===c.id?'active':''}" onclick="setSbFilter('${c.id}')">
+      html += `<div class="sb-cat ${_sbCatFilter===c.id?'active':''}" onclick="setSbFilter('${mod.id}','${c.id}')">
         <span>${c.icon} ${c.name}</span>
         <span class="cnt">${c.scenarios.length}</span>
       </div>`;
-    }).join('');
-  document.getElementById('sb-total').textContent = data.categories.reduce((n,c)=>n+c.scenarios.length,0);
+    });
+  });
+  tree.innerHTML = html;
+  document.getElementById('sb-total').textContent = data.modules.reduce((n,m)=>n+m.categories.reduce((nn,c)=>nn+c.scenarios.length,0),0);
 }
 
-function setSbFilter(catId) {
-  _sbCatFilter = catId;
+function setSbFilter(modId, catId) {
+  _sbModFilter = modId; _sbCatFilter = catId;
   document.getElementById('sb-all').className = catId ? 'sb-all' : 'sb-all active';
   renderSidebar();
   if (_currentTab === 'knowledge') renderKnowledge();
@@ -217,51 +248,53 @@ function showTab(tab) {
   _currentTab = tab;
   document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
   document.getElementById('t-'+tab).classList.add('active');
-  const fns = { knowledge: renderKnowledge, add: renderAdd, history: renderHistory, users: renderUsers };
-  fns[tab]?.();
+  ({ knowledge: renderKnowledge, add: renderAdd, history: renderHistory, users: renderUsers })[tab]?.();
 }
 
 // ── Knowledge Tab ─────────────────────────────────────────
 function renderKnowledge() {
   const data = getData();
-  let rows = [];
-  let idx = 1;
-  data.categories.forEach(cat => {
-    if (_sbCatFilter && cat.id !== _sbCatFilter) return;
-    cat.scenarios.forEach(s => {
-      if (_tableFilter && !s.title.includes(_tableFilter) && !cat.name.includes(_tableFilter)) return;
-      rows.push({ idx: idx++, cat, s });
+  let rows = [], idx = 1;
+  data.modules.forEach(mod => {
+    mod.categories.forEach(cat => {
+      if (_sbCatFilter && cat.id !== _sbCatFilter) return;
+      cat.scenarios.forEach(s => {
+        if (_tableFilter && !s.title.includes(_tableFilter) && !cat.name.includes(_tableFilter)) return;
+        rows.push({ idx: idx++, mod, cat, s });
+      });
     });
   });
 
   document.getElementById('tab-content').innerHTML = `
     <div class="table-toolbar">
       <input type="text" placeholder="搜索条目..." value="${_tableFilter}" oninput="_tableFilter=this.value;renderKnowledge()">
-      <button class="btn btn-primary" onclick="showTab('add')">＋ 新增</button>
+      <button class="btn btn-primary" onclick="showTab('add')">＋ 新增条目</button>
     </div>
     <table>
       <thead><tr>
-        <th style="width:50px">序号</th>
-        <th style="width:120px">模块</th>
-        <th style="width:160px">分类</th>
-        <th>场景</th>
-        <th style="width:60px">风险</th>
+        <th style="width:44px">序号</th>
+        <th style="width:110px">模块</th>
+        <th style="width:130px">分类</th>
+        <th>场景标题</th>
+        <th style="width:56px">风险</th>
+        <th style="width:80px">标签</th>
         <th style="width:120px">操作</th>
       </tr></thead>
       <tbody>
-        ${rows.length ? rows.map(({idx,cat,s}) => `
+        ${rows.length ? rows.map(({idx,mod,cat,s}) => `
           <tr>
-            <td>${idx}</td>
-            <td style="font-size:11px;color:var(--text-secondary)">${MODULE_NAMES[cat.module]||cat.module}</td>
+            <td style="color:var(--text-secondary)">${idx}</td>
+            <td style="font-size:11px;color:var(--text-secondary)">${mod.icon} ${mod.name}</td>
             <td>${cat.icon} ${cat.name}</td>
-            <td>${s.title}</td>
-            <td><span class="risk-dot risk-${s.risk}"></span>${{high:'高',mid:'中',low:'低'}[s.risk]}</td>
+            <td style="font-weight:500">${s.title}</td>
+            <td><span class="risk-dot dot-${s.risk}"></span>${{high:'高',mid:'中',low:'低'}[s.risk]}</td>
+            <td><div class="tag-row">${(s.tags||[]).slice(0,2).map(t=>`<span class="tag">${t}</span>`).join('')}</div></td>
             <td><div class="td-ops">
               <button class="btn btn-default btn-sm" onclick="openEdit('${cat.id}','${s.id}')">编辑</button>
               <button class="btn btn-danger btn-sm" onclick="deleteScenario('${cat.id}','${s.id}')">删除</button>
             </div></td>
           </tr>`).join('')
-          : '<tr><td colspan="6" class="empty">暂无数据</td></tr>'}
+          : '<tr><td colspan="7" class="empty">暂无数据</td></tr>'}
       </tbody>
     </table>
     <div style="margin-top:10px;font-size:12px;color:var(--text-secondary)">共 ${rows.length} 条</div>`;
@@ -270,14 +303,15 @@ function renderKnowledge() {
 // ── Add Tab ───────────────────────────────────────────────
 function renderAdd() {
   const data = getData();
+  let modOpts = data.modules.map(m => `<option value="${m.id}">${m.icon} ${m.name}</option>`).join('');
+  let catOpts = data.modules.flatMap(m => m.categories.map(c => `<option value="${c.id}" data-mod="${m.id}">${m.name} › ${c.icon} ${c.name}</option>`)).join('');
+
   document.getElementById('tab-content').innerHTML = `
     <div class="form-card">
       <div class="form-row">
         <div class="form-group">
           <label>所属分类</label>
-          <select id="add-cat">
-            ${data.categories.map(c=>`<option value="${c.id}">${c.icon} ${c.name}</option>`).join('')}
-          </select>
+          <select id="add-cat">${catOpts}</select>
         </div>
         <div class="form-group">
           <label>风险等级</label>
@@ -289,30 +323,51 @@ function renderAdd() {
         </div>
       </div>
       <div class="form-group">
-        <label>场景标题</label>
+        <label>场景标题 <span style="color:var(--danger)">*</span></label>
         <input id="add-title" placeholder="请输入场景标题">
       </div>
       <div class="form-group">
-        <label>关键词 <span class="form-hint">（逗号分隔）</span></label>
+        <label>触发条件</label>
+        <input id="add-criteria" placeholder="例：顾客询问价格">
+      </div>
+      <div class="form-group">
+        <label>关键词 <span class="form-hint">逗号分隔</span></label>
         <input id="add-keywords" placeholder="例：退款,不满意,投诉">
       </div>
       <div class="form-group">
-        <label>处理流程 <span class="form-hint">（每行一步）</span></label>
+        <label>处理流程 <span class="form-hint">每行一步</span></label>
         <textarea id="add-flow" placeholder="第一步&#10;第二步&#10;第三步"></textarea>
       </div>
       <div class="form-group">
-        <label>参考话术 <span class="form-hint">（格式：标签|话术内容，每行一条）</span></label>
+        <label>参考话术 <span class="form-hint">格式：标签|话术内容，每行一条</span></label>
         <textarea id="add-scripts" placeholder="标准话术|您好，请问有什么可以帮您？"></textarea>
+      </div>
+      <div class="form-group">
+        <label>转人工条件</label>
+        <input id="add-transfer" placeholder="例：顾客不满意则转二线">
       </div>
       <div class="form-group">
         <label>注意事项</label>
         <input id="add-notes" placeholder="可选">
       </div>
-      <div style="display:flex;gap:8px">
-        <button class="btn btn-primary" onclick="addScenario()">提交新增</button>
-        <button class="btn btn-default" onclick="document.querySelectorAll('#tab-content input,#tab-content textarea').forEach(el=>el.value='')">清空</button>
+      <div class="form-row" style="max-width:300px">
+        <div class="form-group">
+          <label>需上报班长</label>
+          <select id="add-report"><option value="false">否</option><option value="true">是</option></select>
+        </div>
+      </div>
+      <div style="display:flex;gap:8px;margin-top:4px">
+        <button class="btn btn-primary" onclick="addScenario()">✓ 提交新增</button>
+        <button class="btn btn-default" onclick="clearAddForm()">清空</button>
       </div>
     </div>`;
+}
+
+function clearAddForm() {
+  ['add-title','add-criteria','add-keywords','add-flow','add-scripts','add-transfer','add-notes'].forEach(id=>{
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
 }
 
 function addScenario() {
@@ -320,35 +375,41 @@ function addScenario() {
   if (!title) { alert('请填写场景标题'); return; }
   const catId = document.getElementById('add-cat').value;
   const data = JSON.parse(JSON.stringify(getData()));
-  const cat = data.categories.find(c=>c.id===catId);
-  const newId = 'custom-' + Date.now();
-  cat.scenarios.push({
-    id: newId,
+  const { cat } = findCat(data, catId);
+  if (!cat) return;
+  const newScen = {
+    id: 'custom-' + Date.now(),
     title,
     risk: document.getElementById('add-risk').value,
     tags: [],
+    criteria: document.getElementById('add-criteria').value.trim(),
     keywords: document.getElementById('add-keywords').value.split(',').map(k=>k.trim()).filter(Boolean),
     flow: document.getElementById('add-flow').value.split('\n').map(l=>l.trim()).filter(Boolean).map(step=>({step})),
     scripts: document.getElementById('add-scripts').value.split('\n').map(l=>l.trim()).filter(Boolean).map(l=>{
       const [label,...rest]=l.split('|'); return {label:label.trim(),text:rest.join('|').trim()};
     }),
-    notes: document.getElementById('add-notes').value.trim()
-  });
-  saveData(data, `新增场景：${title}`);
+    transferCondition: document.getElementById('add-transfer').value.trim(),
+    notes: document.getElementById('add-notes').value.trim(),
+    needReport: document.getElementById('add-report').value === 'true'
+  };
+  cat.scenarios.push(newScen);
+  saveData(data, { op: 'add', desc: `新增场景：${title}`, catName: cat.name, after: newScen });
   renderSidebar();
-  alert('新增成功');
+  alert('新增成功！');
   showTab('knowledge');
 }
 
 // ── Edit Modal ────────────────────────────────────────────
 function openEdit(catId, scenId) {
   const data = getData();
-  const cat = data.categories.find(c=>c.id===catId);
+  const { cat } = findCat(data, catId);
   const s = cat?.scenarios.find(sc=>sc.id===scenId);
   if (!s) return;
+  document.getElementById('modal-title').textContent = '编辑场景';
+  document.getElementById('modal-footer').innerHTML = `
+    <button class="btn btn-default" onclick="closeModal()">取消</button>
+    <button class="btn btn-primary" onclick="saveEdit('${catId}','${scenId}')">保存</button>`;
   document.getElementById('modal-body').innerHTML = `
-    <input type="hidden" id="m-cat" value="${catId}">
-    <input type="hidden" id="m-scen" value="${scenId}">
     <div class="form-row">
       <div class="form-group">
         <label>场景标题</label>
@@ -364,6 +425,10 @@ function openEdit(catId, scenId) {
       </div>
     </div>
     <div class="form-group">
+      <label>触发条件</label>
+      <input id="m-criteria" value="${s.criteria||''}">
+    </div>
+    <div class="form-group">
       <label>关键词（逗号分隔）</label>
       <input id="m-keywords" value="${(s.keywords||[]).join(',')}">
     </div>
@@ -376,28 +441,34 @@ function openEdit(catId, scenId) {
       <textarea id="m-scripts">${(s.scripts||[]).map(sc=>sc.label+'|'+sc.text).join('\n')}</textarea>
     </div>
     <div class="form-group">
+      <label>转人工条件</label>
+      <input id="m-transfer" value="${s.transferCondition||''}">
+    </div>
+    <div class="form-group">
       <label>注意事项</label>
       <input id="m-notes" value="${s.notes||''}">
     </div>`;
   document.getElementById('modal-overlay').className = 'show';
 }
 
-function saveEdit() {
-  const catId = document.getElementById('m-cat').value;
-  const scenId = document.getElementById('m-scen').value;
+function saveEdit(catId, scenId) {
   const data = JSON.parse(JSON.stringify(getData()));
-  const cat = data.categories.find(c=>c.id===catId);
+  const { cat } = findCat(data, catId);
   const s = cat?.scenarios.find(sc=>sc.id===scenId);
   if (!s) return;
+  const before = JSON.parse(JSON.stringify(s));
   s.title = document.getElementById('m-title').value.trim();
   s.risk = document.getElementById('m-risk').value;
+  s.criteria = document.getElementById('m-criteria').value.trim();
   s.keywords = document.getElementById('m-keywords').value.split(',').map(k=>k.trim()).filter(Boolean);
   s.flow = document.getElementById('m-flow').value.split('\n').map(l=>l.trim()).filter(Boolean).map(step=>({step}));
   s.scripts = document.getElementById('m-scripts').value.split('\n').map(l=>l.trim()).filter(Boolean).map(l=>{
     const [label,...rest]=l.split('|'); return {label:label.trim(),text:rest.join('|').trim()};
   });
+  s.transferCondition = document.getElementById('m-transfer').value.trim();
   s.notes = document.getElementById('m-notes').value.trim();
-  saveData(data, `编辑场景：${s.title}`);
+  const diffs = diffScenario(before, s);
+  saveData(data, { op:'edit', desc:`编辑场景：${s.title}`, catName: cat.name, before, after: s, diffs });
   closeModal();
   renderSidebar();
   renderKnowledge();
@@ -407,13 +478,14 @@ function closeModal() { document.getElementById('modal-overlay').className = '';
 
 function deleteScenario(catId, scenId) {
   const data = getData();
-  const cat = data.categories.find(c=>c.id===catId);
+  const { cat } = findCat(data, catId);
   const s = cat?.scenarios.find(sc=>sc.id===scenId);
-  if (!s || !confirm(`确认删除「${s.title}」？`)) return;
+  if (!s || !confirm(`确认���除「${s.title}」？此操作不可恢复。`)) return;
   const newData = JSON.parse(JSON.stringify(data));
-  const nc = newData.categories.find(c=>c.id===catId);
+  const { cat: nc } = findCat(newData, catId);
+  const deleted = JSON.parse(JSON.stringify(s));
   nc.scenarios = nc.scenarios.filter(sc=>sc.id!==scenId);
-  saveData(newData, `删除场景：${s.title}`);
+  saveData(newData, { op:'del', desc:`删除场景：${s.title}`, catName: cat.name, before: deleted });
   renderSidebar();
   renderKnowledge();
 }
@@ -421,40 +493,135 @@ function deleteScenario(catId, scenId) {
 // ── History Tab ───────────────────────────────────────────
 function renderHistory() {
   const hist = getHistory();
-  document.getElementById('tab-content').innerHTML = hist.length
-    ? `<div class="history-list">${hist.map(h=>`
-        <div class="history-item">
-          <span class="history-time">${new Date(h.time).toLocaleString('zh-CN')}</span>
-          <span class="history-desc">${h.desc}</span>
-          <span class="history-tag">${h.user||'系统'}</span>
-        </div>`).join('')}</div>`
-    : '<div class="empty">暂无操作记录</div>';
+  if (!hist.length) {
+    document.getElementById('tab-content').innerHTML = '<div class="empty">暂无操作记录</div>';
+    return;
+  }
+  const opLabel = { add:'新增', edit:'编辑', del:'删除' };
+  const opCls   = { add:'op-add', edit:'op-edit', del:'op-del' };
+  document.getElementById('tab-content').innerHTML = `
+    <div style="margin-bottom:12px;font-size:12px;color:var(--text-secondary)">共 ${hist.length} 条记录，点击展开查看详情</div>
+    <div class="history-list">
+      ${hist.map((h,i) => {
+        const op = h.op || 'edit';
+        let detailHtml = '';
+        if (op === 'edit' && h.diffs && h.diffs.length) {
+          detailHtml = `<table class="diff-table">
+            <thead><tr><th style="width:100px">字段</th><th>修改前</th><th>修改后</th></tr></thead>
+            <tbody>${h.diffs.map(d=>`
+              <tr>
+                <td><strong>${d.label}</strong></td>
+                <td class="diff-old">${d.before||'���空）'}</td>
+                <td class="diff-new">${d.after||'（空）'}</td>
+              </tr>`).join('')}
+            </tbody></table>`;
+        } else if (op === 'add' && h.after) {
+          detailHtml = `<div style="font-size:12px;color:var(--text-secondary);line-height:2">
+            <div>分类：<span class="diff-new" style="padding:1px 6px;border-radius:4px">${h.catName||''}</span></div>
+            <div>标题：<span class="diff-new" style="padding:1px 6px;border-radius:4px">${h.after.title}</span></div>
+            <div>风险：<span class="diff-new" style="padding:1px 6px;border-radius:4px">${{high:'高风险',mid:'中风险',low:'低风险'}[h.after.risk]||''}</span></div>
+            ${h.after.flow?.length?`<div>流程：${h.after.flow.map(f=>f.step).join(' → ')}</div>`:''}
+          </div>`;
+        } else if (op === 'del' && h.before) {
+          detailHtml = `<div style="font-size:12px;color:var(--text-secondary);line-height:2">
+            <div>分类：${h.catName||''}</div>
+            <div>标题：<span class="diff-old" style="padding:1px 6px;border-radius:4px">${h.before.title}</span>（已删除）</div>
+            ${h.before.flow?.length?`<div>原流程：${h.before.flow.map(f=>f.step).join(' → ')}</div>`:''}
+          </div>`;
+        }
+        return `<div class="history-item">
+          <div class="history-header" onclick="toggleHistory(${i})">
+            <span class="history-time">${new Date(h.time).toLocaleString('zh-CN')}</span>
+            <span class="history-desc">${h.desc}</span>
+            <span class="history-op ${opCls[op]}">${opLabel[op]||op}</span>
+            <span class="history-user">${h.user||'系统'}</span>
+            <span style="font-size:11px;color:#ccc;margin-left:4px">▼</span>
+          </div>
+          <div class="history-detail" id="hd-${i}">${detailHtml||'<span style="color:var(--text-secondary);font-size:12px">无详细记录</span>'}</div>
+        </div>`;
+      }).join('')}
+    </div>`;
+}
+
+function toggleHistory(i) {
+  const el = document.getElementById('hd-'+i);
+  if (el) el.classList.toggle('open');
 }
 
 // ── Users Tab ─────────────────────────────────────────────
 function renderUsers() {
   const accounts = getAccounts();
+  const roleLabel = { admin:'管理员', user:'普通用户', guest:'访客' };
+  const roleCls   = { admin:'admin-badge', user:'approved-badge', guest:'guest-badge' };
   document.getElementById('tab-content').innerHTML = `
-    <div class="user-table-wrap">
-      <table>
-        <thead><tr>
-          <th>用户名</th><th>姓名</th><th>角色</th><th>状态</th><th style="width:140px">操作</th>
-        </tr></thead>
-        <tbody>
-          ${accounts.map(a=>`
-            <tr>
-              <td>${a.username}</td>
-              <td>${a.name}</td>
-              <td><span class="${a.role==='admin'?'admin-badge':''}"> ${a.role==='admin'?'管理员':'普通用户'}</span></td>
-              <td><span class="${a.approved?'approved-badge':'pending-badge'}">${a.approved?'已审核':'待审核'}</span></td>
-              <td><div class="td-ops">
-                ${!a.approved?`<button class="btn btn-primary btn-sm" onclick="approveUser('${a.username}')">审核通过</button>`:''}
-                ${a.username!==_u.username?`<button class="btn btn-danger btn-sm" onclick="deleteUser('${a.username}')">删除</button>`:''}
-              </div></td>
-            </tr>`).join('')}
-        </tbody>
-      </table>
-    </div>`;
+    <div class="user-toolbar">
+      <div style="font-size:13px;color:var(--text-secondary)">共 ${accounts.length} 个账号</div>
+      <button class="btn btn-primary" onclick="openAddUser()">＋ 新增用户</button>
+    </div>
+    <table>
+      <thead><tr>
+        <th>用户名</th><th>姓名</th><th>角色</th><th>状态</th><th style="width:160px">操作</th>
+      </tr></thead>
+      <tbody>
+        ${accounts.map(a=>`
+          <tr>
+            <td style="font-weight:500">${a.username}</td>
+            <td>${a.name}</td>
+            <td><span class="${roleCls[a.role]||''}">${roleLabel[a.role]||a.role}</span></td>
+            <td><span class="${a.approved?'approved-badge':'pending-badge'}">${a.approved?'已审核':'待审核'}</span></td>
+            <td><div class="td-ops">
+              ${!a.approved?`<button class="btn btn-success btn-sm" onclick="approveUser('${a.username}')">审核通过</button>`:''}
+              ${a.username!==_u.username?`<button class="btn btn-danger btn-sm" onclick="deleteUser('${a.username}')">删除</button>`:''}
+            </div></td>
+          </tr>`).join('')}
+      </tbody>
+    </table>`;
+}
+
+function openAddUser() {
+  document.getElementById('modal-title').textContent = '新增用户';
+  document.getElementById('modal-footer').innerHTML = `
+    <button class="btn btn-default" onclick="closeModal()">取消</button>
+    <button class="btn btn-primary" onclick="submitAddUser()">确认新增</button>`;
+  document.getElementById('modal-body').innerHTML = `
+    <div class="form-group">
+      <label>用户名 <span style="color:var(--danger)">*</span></label>
+      <input id="nu-username" placeholder="2-20位，字母数字下划线">
+    </div>
+    <div class="form-group">
+      <label>真实姓名 <span style="color:var(--danger)">*</span></label>
+      <input id="nu-name" placeholder="请输入真实姓名">
+    </div>
+    <div class="form-group">
+      <label>密码 <span style="color:var(--danger)">*</span></label>
+      <input type="password" id="nu-pwd" placeholder="至少6位">
+    </div>
+    <div class="form-group">
+      <label>角色</label>
+      <select id="nu-role">
+        <option value="user">普通用户</option>
+        <option value="admin">管理员</option>
+      </select>
+    </div>
+    <div id="nu-err" style="color:var(--danger);font-size:12px;margin-top:4px"></div>`;
+  document.getElementById('modal-overlay').className = 'show';
+}
+
+function submitAddUser() {
+  const username = document.getElementById('nu-username').value.trim();
+  const name     = document.getElementById('nu-name').value.trim();
+  const pwd      = document.getElementById('nu-pwd').value;
+  const role     = document.getElementById('nu-role').value;
+  const errEl    = document.getElementById('nu-err');
+  if (!username || !name || !pwd) { errEl.textContent = '请填写所有必填项'; return; }
+  if (pwd.length < 6) { errEl.textContent = '密码至少6位'; return; }
+  if (!/^[a-zA-Z0-9_\u4e00-\u9fa5]{2,20}$/.test(username)) { errEl.textContent = '用户名格式不正确'; return; }
+  const accounts = getAccounts();
+  if (accounts.find(a=>a.username===username)) { errEl.textContent = '该用户名已存在'; return; }
+  accounts.push({ username, password: btoa(pwd), name, role, approved: true });
+  saveAccounts(accounts);
+  closeModal();
+  renderUsers();
 }
 
 function approveUser(username) {

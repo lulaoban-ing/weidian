@@ -202,6 +202,9 @@ body::before{content:'';position:fixed;inset:0;background:
     <div class="help-link" id="help-link">
       还没有账号？<a onclick="switchTab('register')">申请注册</a>
     </div>
+    <div style="text-align:center;margin-top:12px">
+      <a onclick="doGuest()" style="font-size:13px;color:#999;cursor:pointer;text-decoration:none;border:1px solid #ddd;border-radius:8px;padding:8px 24px;display:inline-block;transition:.2s" onmouseover="this.style.borderColor='#e63946';this.style.color='#e63946'" onmouseout="this.style.borderColor='#ddd';this.style.color='#999'">👁 访客模式浏览</a>
+    </div>
   </div>
 </div>
 
@@ -209,7 +212,12 @@ body::before{content:'';position:fixed;inset:0;background:
 const SLOGANS = ['孜孜不倦，力求卓越。','熟能生巧，日积月累。','执着追求，方能达成目标。','时刻谨记，勇毅不屈。','宝剑锋从磨砺出，梅花香自苦寒来。','知行合一，方可不断进步。','虽千万人吾往矣。','不入虎穴，焉得虎子。','真金不怕火炼，只要不停打磨便能熠熠发光。','知识是宝剑，实践是磨杵。','路漫漫其修远兮，吾将上下而求索。','万事开头难，只要坚持，一切皆有可能。','路遥知马力，日久见人心。','非淡泊无以明志，非宁静无以致远。','学而不思则罔，思而不学则殆。','塞翁失马，焉知非福。','一日之计在于晨，一年之计在于春。','己所不欲，勿施于人。'];
 document.getElementById('brand-slogan').textContent = SLOGANS[Math.floor(Math.random()*SLOGANS.length)];
 
-// ── Default accounts ──────────────────────────────────────
+function doGuest() {
+  sessionStorage.setItem('kb_user', JSON.stringify({ username: 'guest', name: '访客', role: 'guest' }));
+  window.location.href = 'index.html';
+}
+
+
 const DEFAULT_ACCOUNTS = [
   { username: 'admin',     password: btoa('weidian24admin'), name: '管理员', role: 'admin',  approved: true },
   { username: 'lujuntong', password: btoa('weidian24'),      name: '卢老板', role: 'admin',  approved: true },

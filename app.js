@@ -403,6 +403,9 @@ function doLogout() {
 document.addEventListener('DOMContentLoaded', ()=>{
   if (_kbUser) {
     document.getElementById('user-name').textContent = _kbUser.name;
+    if (_kbUser.role === 'guest') {
+      document.getElementById('admin-status').textContent = '访客模式';
+    }
     if (_kbUser.role === 'admin') {
       document.getElementById('admin-btn').style.display = '';
       document.getElementById('backend-btn').style.display = '';
