@@ -129,8 +129,9 @@ function showHome() {
     </div>
     ${moduleCards ? `<div class="module-grid">${moduleCards}</div>` : ''}
     ${highFreqHtml}
+    ${state.activeModule === 'all' ? `
     <div class="page-header" style="margin-top:8px"><h2>📢 近期流程更新</h2><p style="font-size:12px;color:var(--text-secondary)">管理员发布的最新流程变更</p></div>
-    ${renderUpdates()}
+    ${renderUpdates()}` : ''}
     ${state.activeModule !== 'all' ? `
     <div class="page-header" style="margin-top:16px"><h2>${data.modules.find(m=>m.id===state.activeModule)?.name||''}</h2></div>
     <div class="scenario-list">
@@ -270,9 +271,13 @@ function showScenario(catId, scenarioId) {
 
 // ── Updates ───────────────────────────────────────────────
 function renderUpdates() {
-  const items = JSON.parse(localStorage.getItem('kb_updates') || '[]');
-  if (!items.length) return `<div class="updates-empty">暂无流程更新，管理员可在后台上传</div>`;
-  const doubled = [...items, ...items];
+  const all = JSON.parse(localStorage.getItem('kb_updates') || '[]');
+  if (!all.length) return `<div class="updates-empty">暂无流程更新，管理员可在后台上传</div>`;
+  const now = Date.now();
+  const oneDayMs = 86400000;
+  let items = all.filter(u => (now - new Date(u.time).getTime()) < oneDayMs);
+  if (!items.length) items = all.slice(-3);
+  const doubled = items.length > 1 ? [...items, ...items] : items;
   return `<div class="updates-slider"><div class="slide-track">${doubled.map(u=>`
     <div class="slide-item"><img src="${u.img}" alt="${u.title}">
       <div class="slide-caption">${u.title}<div class="slide-time">${u.time}</div></div>
