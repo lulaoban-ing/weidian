@@ -230,11 +230,14 @@ function showScenario(catId, scenarioId) {
     ${s.flow?.length?`
     <div class="section-card">
       <h4><span class="section-icon">📋</span>处理流程</h4>
-      <div class="flow-steps">
+      <div class="flow-steps${s.flow.length>4?' flow-vertical':''}">
         ${s.flow.map((f,i)=>`
           <div class="flow-step">
-            <div class="step-num">${i+1}</div>
-            <div class="step-content">${f.step}</div>
+            <div class="flow-card">
+              <div class="step-num">${i+1}</div>
+              <div class="step-content">${f.step}</div>
+            </div>
+            ${i<s.flow.length-1?'<span class="flow-arrow">→</span>':''}
           </div>`).join('')}
       </div>
     </div>`:''}
