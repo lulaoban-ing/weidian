@@ -615,7 +615,7 @@ function submitAddUser() {
   const errEl    = document.getElementById('nu-err');
   if (!username || !name || !pwd) { errEl.textContent = '请填写所有必填项'; return; }
   if (pwd.length < 6) { errEl.textContent = '密码至少6位'; return; }
-  if (!/^[a-zA-Z0-9_\u4e00-\u9fa5]{2,20}$/.test(username)) { errEl.textContent = '用户名格式不正确'; return; }
+  if (!/^[\u4e00-\u9fa5a-zA-Z0-9_]{2,20}$/.test(username)) { errEl.textContent = '用户名 2-20 位，支持中文、字母、数字、下划线'; return; }
   const accounts = getAccounts();
   if (accounts.find(a=>a.username===username)) { errEl.textContent = '该用户名已存在'; return; }
   accounts.push({ username, password: btoa(pwd), name, role, approved: true });
