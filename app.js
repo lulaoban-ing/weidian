@@ -448,7 +448,6 @@ document.addEventListener('DOMContentLoaded', ()=>{
       document.getElementById('admin-status').textContent = '访客模式';
     }
     if (_kbUser.role === 'admin') {
-      document.getElementById('admin-btn').style.display = '';
       document.getElementById('backend-btn').style.display = '';
       document.getElementById('admin-status').textContent = '管理员模式';
     }
