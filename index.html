@@ -269,7 +269,7 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei
   <div id="main">
     <div id="topbar">
       <div id="search-box">
-        <input type="text" id="global-search" placeholder="🔍 搜索场景、话术、处理流程..." oninput="globalSearch(this.value)" onkeydown="if(event.key==='Escape')clearSearch()" autocomplete="off">
+        <input type="text" id="global-search" placeholder="🔍 搜索场景、话术、处理流程..." oninput="globalSearch(this.value)" onkeydown="if(event.key==='Escape')clearSearch()" autocomplete="off" name="search-kb" readonly onfocus="this.removeAttribute('readonly')">
         <span class="search-icon">⌘K</span>
       </div>
       <div class="topbar-right">
