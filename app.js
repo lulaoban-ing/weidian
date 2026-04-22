@@ -28,7 +28,7 @@ function saveData(data) {
 function filterModule(moduleId) {
   state.activeModule = moduleId;
   document.querySelectorAll('.mod-tab').forEach(t => t.classList.remove('active'));
-  const tabMap = { 'all':'tab-all', 'sop-scenarios':'tab-sop', 'exception-handling':'tab-exc', 'ai-watching':'tab-ai' };
+  const tabMap = { 'all':'tab-all', 'ai-watching':'tab-ai', 'store-manager':'tab-sm', 'system-devices':'tab-sys', 'training-standards':'tab-tr' };
   document.getElementById(tabMap[moduleId])?.classList.add('active');
   showHome();
 }
@@ -85,7 +85,7 @@ function showHome() {
   const moduleCards = state.activeModule === 'all'
     ? data.modules.map(mod => {
         const cnt = mod.categories.reduce((n,c)=>n+c.scenarios.length,0);
-        const clsMap = {'sop-scenarios':'mod-sop','exception-handling':'mod-exception','ai-watching':'mod-ai','script-library':'mod-sop','tools-standards':'mod-exception','training-learning':'mod-ai','case-review':'mod-exception'};
+        const clsMap = {'ai-watching':'mod-ai','store-manager':'mod-sop','system-devices':'mod-exception','training-standards':'mod-ai'};
         return `<div class="module-card ${clsMap[mod.id]||'mod-sop'}" onclick="filterModule('${mod.id}')">
           <div class="mc-icon">${mod.icon}</div>
           <div class="mc-title">${mod.name}</div>
