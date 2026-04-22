@@ -130,7 +130,19 @@ function showHome() {
     ${moduleCards ? `<div class="module-grid">${moduleCards}</div>` : ''}
     ${highFreqHtml}
     <div class="page-header" style="margin-top:8px"><h2>📢 近期流程更新</h2><p style="font-size:12px;color:var(--text-secondary)">管理员发布的最新流程变更</p></div>
-    ${renderUpdates()}`;
+    ${renderUpdates()}
+    ${state.activeModule !== 'all' ? `
+    <div class="page-header" style="margin-top:16px"><h2>${data.modules.find(m=>m.id===state.activeModule)?.name||''}</h2></div>
+    <div class="scenario-list">
+      ${getFilteredCategories().map(cat=>`
+        <div class="scenario-item" onclick="showCategory('${cat.id}')">
+          <div class="s-body">
+            <div class="s-title">${cat.icon} ${cat.name}</div>
+            <div class="s-tags"><span class="s-tag">${cat.scenarios.length} 个场景</span></div>
+          </div>
+          <span class="s-arrow">›</span>
+        </div>`).join('')}
+    </div>` : ''}`;
   renderNav();
 }
 
