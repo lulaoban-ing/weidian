@@ -104,6 +104,7 @@ function showHome() {
     data.modules.forEach(mod => mod.categories.forEach(cat => cat.scenarios.forEach(s => {
       if (HIGH_FREQ_IDS.includes(s.id)) highFreqScens.push({cat, s});
     })));
+    highFreqScens.sort((a,b)=>({high:0,mid:1,low:2}[a.s.risk]-{high:0,mid:1,low:2}[b.s.risk]));
   }
   const highFreqHtml = highFreqScens.length ? `
     <div class="page-header" style="margin-top:8px"><h2>⚡ 高频场景</h2><p style="font-size:12px;color:var(--text-secondary)">最常处理的场景，快速直达</p></div>
