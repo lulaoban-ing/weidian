@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>微店 24 · 登录</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+html,body{height:100%;font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei','Helvetica Neue',Arial,sans-serif;font-size:14px;-webkit-font-smoothing:antialiased}
+body{display:flex;align-items:center;justify-content:center;background:#1a0505;min-height:100vh;overflow:hidden;position:relative}
+
+body::before{content:'';position:fixed;inset:0;background:
+  radial-gradient(ellipse 600px 400px at 10% 50%, rgba(193,18,31,.35) 0%, transparent 70%),
+  radial-gradient(ellipse 500px 350px at 90% 50%, rgba(193,18,31,.25) 0%, transparent 70%),
+  radial-gradient(ellipse 800px 600px at 50% 100%, rgba(90,10,10,.6) 0%, transparent 60%);
+  pointer-events:none;z-index:0}
+
+.bg-particles{position:fixed;inset:0;pointer-events:none;z-index:0;overflow:hidden}
+.bg-particles span{position:absolute;display:block;border-radius:50%;animation:particleDrift linear infinite;opacity:0}
+.bg-particles span:nth-child(1){width:3px;height:3px;background:rgba(230,57,70,.6);left:8%;animation-duration:12s;animation-delay:0s}
+.bg-particles span:nth-child(2){width:2px;height:2px;background:rgba(255,120,120,.5);left:18%;animation-duration:15s;animation-delay:2s}
+.bg-particles span:nth-child(3){width:4px;height:4px;background:rgba(193,18,31,.7);left:28%;animation-duration:10s;animation-delay:4s}
+.bg-particles span:nth-child(4){width:2px;height:2px;background:rgba(230,57,70,.4);left:72%;animation-duration:14s;animation-delay:1s}
+.bg-particles span:nth-child(5){width:3px;height:3px;background:rgba(255,100,100,.5);left:82%;animation-duration:11s;animation-delay:3s}
+.bg-particles span:nth-child(6){width:2px;height:2px;background:rgba(193,18,31,.6);left:92%;animation-duration:13s;animation-delay:5s}
+.bg-particles span:nth-child(7){width:5px;height:5px;background:rgba(230,57,70,.3);left:5%;animation-duration:16s;animation-delay:6s}
+.bg-particles span:nth-child(8){width:2px;height:2px;background:rgba(255,150,150,.4);left:95%;animation-duration:9s;animation-delay:2s}
+
+@keyframes particleDrift{
+  0%{transform:translateY(100vh) scale(0);opacity:0}
+  10%{opacity:1}
+  90%{opacity:.6}
+  100%{transform:translateY(-100px) scale(1.2);opacity:0}
+}
+
+.card{display:flex;width:960px;height:620px;border-radius:24px;overflow:hidden;box-shadow:0 30px 100px rgba(0,0,0,.6);position:relative;z-index:1}
+
+/* ─── Left Panel (Animated Logo) ───────────────── */
+.left{flex:1;background:linear-gradient(135deg,#5a0a0a 0%,#7a1515 30%,#9a2020 60%,#c1121f 100%);position:relative;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:60px 40px;color:#fff}
+
+/* Animated blobs behind logo */
+.blobs{position:absolute;inset:0;overflow:hidden;pointer-events:none}
+.blob{position:absolute;border-radius:50%;animation:blobFloat 8s ease-in-out infinite}
+.blob:nth-child(1){width:200px;height:200px;background:radial-gradient(circle,rgba(230,57,70,.4),transparent);top:-50px;left:-30px;animation-delay:0s}
+.blob:nth-child(2){width:160px;height:160px;background:radial-gradient(circle,rgba(239,71,111,.3),transparent);bottom:-40px;right:20px;animation-delay:2s}
+.blob:nth-child(3){width:120px;height:120px;background:radial-gradient(circle,rgba(255,99,99,.25),transparent);top:30%;left:20%;animation-delay:4s}
+
+@keyframes blobFloat{
+  0%,100%{transform:translate(0,0) scale(1)}
+  33%{transform:translate(20px,-15px) scale(1.05)}
+  66%{transform:translate(-10px,20px) scale(.95)}
+}
+
+.logo-container{
+  position:relative;
+  width:220px;height:140px;
+  animation:textReveal 1.8s cubic-bezier(.4,0,.2,1) forwards
+}
+.logo-text{
+  font-size:72px;font-weight:900;letter-spacing:4px;
+  color:#fff;text-align:center;
+  animation:textReveal 1.8s cubic-bezier(.4,0,.2,1) forwards;opacity:0;transform:translateY(30px);
+}
+@keyframes textReveal{from{opacity:0;transform:translateY(30px)}to{opacity:1;transform:translateY(0)}}
+
+.brand-slogan{margin-top:40px;font-size:16px;color:rgba(255,255,255,.7);text-align:center;line-height:1.6}
+
+.features{position:absolute;bottom:40px;display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.feature-pill{padding:8px 16px;border-radius:20px;background:rgba(255,255,255,.1);border:1px solid rgba(255,255,255,.15);font-size:12px;color:rgba(255,255,255,.9)}
+
+/* ─── Right Panel (Login Form) ────────────────── */
+.right{width:440px;background:linear-gradient(180deg,#fff0f0 0%,#ffe6e6 50%,#fff 100%);padding:60px 50px;display:flex;flex-direction:column;justify-content:center;position:relative}
+.right-header{text-align:center;margin-bottom:40px}
+.right-logo{font-size:32px;font-weight:800;color:#111;margin-bottom:8px}
+.right-subtitle{font-size:14px;color:#888}
+.right-logo-img{position:absolute;top:20px;right:20px;width:100px;height:auto;opacity:.9}
+
+/* Tab switcher */
+.tabs{display:flex;gap:8px;margin-bottom:30px;background:#fff5f5;padding:6px;border-radius:12px}
+.tab{flex:1;padding:10px 16px;text-align:center;border:none;background:transparent;font-size:14px;font-weight:500;color:#666;cursor:pointer;border-radius:8px;transition:.2s}
+.tab:hover{color:#111}
+.tab.active{background:#fff;box-shadow:0 2px 8px rgba(0,0,0,.08);color:#e63946;font-weight:600}
+
+/* Forms */
+.form-container{display:none}
+.form-container.active{display:block}
+.input-group{margin-bottom:20px}
+.input-group label{display:block;font-size:13px;font-weight:600;color:#333;margin-bottom:8px}
+.input-group input{width:100%;padding:12px 16px;border:2px solid #e8e8e8;border-radius:10px;font-size:14px;outline:none;transition:.2s;font-family:inherit;color:#111;background:#fff}
+.input-group input:focus{border-color:#e63946;box-shadow:0 0 0 4px rgba(230,57,70,.1)}
+.input-group input::placeholder{color:#bbb}
+.err-msg{color:#ef4444;font-size:12px;margin-top:8px;min-height:18px}
+.btn-submit{width:100%;padding:14px;background:#e63946;color:#fff;border:none;border-radius:10px;font-size:15px;font-weight:600;cursor:pointer;letter-spacing:.5px;margin-top:16px;transition:.2s}
+.btn-submit:hover{background:#c1121f;transform:translateY(-1px);box-shadow:0 4px 12px rgba(230,57,70,.3)}
+.btn-submit:active{transform:translateY(0)}
+.help-link{text-align:center;margin-top:20px;font-size:13px;color:#666}
+.help-link a{color:#e63946;text-decoration:none;font-weight:500}
+.help-link a:hover{text-decoration:underline}
+
+/* Toast */
+.toast{position:fixed;top:24px;left:50%;transform:translateX(-50%);background:#1e293b;color:#fff;padding:12px 24px;border-radius:10px;font-size:14px;opacity:0;pointer-events:none;transition:.3s;z-index:999;white-space:nowrap;box-shadow:0 8px 24px rgba(0,0,0,.2)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(-10px)}
+
+@media(max-width:1000px){
+  .card{width:95vw;height:580px;border-radius:18px}
+  .right{width:380px;padding:40px 32px}
+  .logo-text{font-size:64px}
+  .brand-slogan{font-size:14px}
+}
+@media(max-width:768px){
+  body{padding:12px}
+  .card{flex-direction:column;height:auto;width:100%}
+  .left{padding:40px 24px;min-height:280px}
+  .right{width:100%;padding:40px 24px}
+  .logo-text{font-size:52px}
+  .logo-container{width:180px;height:115px}
+  .features{display:none}
+}
+</style>
+</head>
+<body>
+
+<div class="bg-particles">
+  <span></span><span></span><span></span><span></span>
+  <span></span><span></span><span></span><span></span>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<div class="card">
+  <!-- Left: Animated Logo -->
+  <div class="left">
+    <div class="blobs">
+      <div class="blob"></div>
+      <div class="blob"></div>
+      <div class="blob"></div>
+    </div>
+
+    <div class="logo-container">
+      <div class="logo-text">微店 24</div>
+    </div>
+
+    <div class="brand-slogan" id="brand-slogan"></div>
+
+    <div class="features">
+      <div class="feature-pill">全场景客服流程</div>
+      <div class="feature-pill">运营 SOP 规范</div>
+      <div class="feature-pill">智能搜索定位</div>
+      <div class="feature-pill">风险等级预警</div>
+    </div>
+  </div>
+
+  <!-- Right: Login Form -->
+  <div class="right">
+    <div class="right-header">
+      <img src="../logo/Logo-Basic.png" alt="微店 24" class="right-logo-img">
+      <div class="right-logo">微店 24 · 知识系统</div>
+      <div class="right-subtitle">值班店长专属工作台</div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active" onclick="switchTab('login')">登录</button>
+      <button class="tab" onclick="switchTab('register')">注册</button>
+    </div>
+
+    <!-- Login Form -->
+    <div id="login-form" class="form-container active">
+      <div class="input-group">
+        <label>用户名</label>
+        <input type="text" id="login-user" placeholder="请输入用户名" autocomplete="username">
+      </div>
+      <div class="input-group">
+        <label>密码</label>
+        <input type="password" id="login-pwd" placeholder="请输入密码" autocomplete="current-password">
+        <div class="err-msg" id="login-err"></div>
+      </div>
+      <button class="btn-submit" onclick="doLogin()">立 即 登 录</button>
+    </div>
+
+    <!-- Register Form -->
+    <div id="register-form" class="form-container">
+      <div class="input-group">
+        <label>用户名</label>
+        <input type="text" id="reg-user" placeholder="请设置用户名（2-20 位）" autocomplete="off">
+      </div>
+      <div class="input-group">
+        <label>真实姓名</label>
+        <input type="text" id="reg-name" placeholder="请输入您的真实姓名">
+      </div>
+      <div class="input-group">
+        <label>密码</label>
+        <input type="password" id="reg-pwd" placeholder="请设置密码（至少 6 位）" autocomplete="new-password">
+      </div>
+      <div class="input-group">
+        <label>确认密码</label>
+        <input type="password" id="reg-pwd2" placeholder="请再次输入密码" autocomplete="new-password">
+      </div>
+      <div class="err-msg" id="reg-err"></div>
+      <button class="btn-submit" onclick="doRegister()">提 交 注 册</button>
+    </div>
+
+    <div class="help-link" id="help-link">
+      还没有账号？<a onclick="switchTab('register')">申请注册</a>
+    </div>
+  </div>
+</div>
+
+<script>
+const SLOGANS = ['孜孜不倦，力求卓越。','熟能生巧，日积月累。','执着追求，方能达成目标。','时刻谨记，勇毅不屈。','宝剑锋从磨砺出，梅花香自苦寒来。','知行合一，方可不断进步。','虽千万人吾往矣。','不入虎穴，焉得虎子。','真金不怕火炼，只要不停打磨便能熠熠发光。','知识是宝剑，实践是磨杵。','路漫漫其修远兮，吾将上下而求索。','万事开头难，只要坚持，一切皆有可能。','路遥知马力，日久见人心。','非淡泊无以明志，非宁静无以致远。','学而不思则罔，思而不学则殆。','塞翁失马，焉知非福。','一日之计在于晨，一年之计在于春。','己所不欲，勿施于人。'];
+document.getElementById('brand-slogan').textContent = SLOGANS[Math.floor(Math.random()*SLOGANS.length)];
+
+// ── Default accounts ──────────────────────────────────────
+const DEFAULT_ACCOUNTS = [
+  { username: 'admin',     password: btoa('weidian24admin'), name: '管理员', role: 'admin',  approved: true },
+  { username: 'lujuntong', password: btoa('weidian24'),      name: '卢老板', role: 'admin',  approved: true },
+  { username: 'demo',      password: btoa('demo123'),        name: '演示账号', role: 'user', approved: true }
+];
+
+function getAccounts() {
+  const saved = localStorage.getItem('kb_accounts');
+  if (saved) { try { return JSON.parse(saved); } catch(e){} }
+  localStorage.setItem('kb_accounts', JSON.stringify(DEFAULT_ACCOUNTS));
+  return DEFAULT_ACCOUNTS;
+}
+
+function saveAccounts(accounts) {
+  localStorage.setItem('kb_accounts', JSON.stringify(accounts));
+}
+
+// ── Tab Switching ────────────────────────────────────────
+function switchTab(tab) {
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  event?.target && event.target.classList.add('active');
+
+  document.getElementById('login-form').className = tab==='login' ? 'form-container active' : 'form-container';
+  document.getElementById('register-form').className = tab==='register' ? 'form-container active' : 'form-container';
+
+  const helpLink = document.getElementById('help-link');
+  helpLink.innerHTML = tab==='login'
+    ? '还没有账号？<a onclick="switchTab(\'register\')">申请注册</a>'
+    : '已有账号？<a onclick="switchTab(\'login\')">立即登录</a>';
+
+  document.getElementById('login-err').textContent = '';
+  document.getElementById('reg-err').textContent = '';
+}
+
+// ── Login ─────────────────────────────────────────────────
+function doLogin() {
+  const username = document.getElementById('login-user').value.trim();
+  const password = document.getElementById('login-pwd').value;
+  const errEl = document.getElementById('login-err');
+  if (!username || !password) { errEl.textContent = '请填写用户名和密码'; return; }
+  const accounts = getAccounts();
+  const account = accounts.find(a => a.username === username && a.password === btoa(password));
+  if (!account) { errEl.textContent = '用户名或密码错误'; return; }
+  if (!account.approved) { errEl.textContent = '账号待审核，请联系管理员'; return; }
+  sessionStorage.setItem('kb_user', JSON.stringify({ username: account.username, name: account.name, role: account.role }));
+  window.location.href = 'index.html';
+}
+
+// ─�� Register ──────────────────────────────────────────────
+function doRegister() {
+  const username = document.getElementById('reg-user').value.trim();
+  const name     = document.getElementById('reg-name').value.trim();
+  const pwd      = document.getElementById('reg-pwd').value;
+  const pwd2     = document.getElementById('reg-pwd2').value;
+  const errEl    = document.getElementById('reg-err');
+  if (!username || !name || !pwd) { errEl.textContent = '请填写所有字段'; return; }
+  if (pwd.length < 6) { errEl.textContent = '密码至少 6 位'; return; }
+  if (pwd !== pwd2) { errEl.textContent = '两次密码不一致'; return; }
+  if (!/^[a-zA-Z0-9_\u4e00-\u9fa5]{2,20}$/.test(username)) { errEl.textContent = '用户名 2-20 位，仅支持字母数字下划线汉字'; return; }
+  const accounts = getAccounts();
+  if (accounts.find(a => a.username === username)) { errEl.textContent = '该用户名已被注册'; return; }
+  accounts.push({ username, password: btoa(pwd), name, role: 'user', approved: false });
+  saveAccounts(accounts);
+  showToast('注册申请已提交，请等待管理员审核');
+  switchTab('login');
+  document.getElementById('login-user').value = username;
+}
+
+// ── Toast ───────────────────���─────────────────────────────
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.classList.add('show');
+  setTimeout(()=>t.classList.remove('show'), 3000);
+}
+
+// ── Keyboard ──────────────────────────────────────────────
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter') {
+    const lv = document.getElementById('login-form');
+    if (lv.style.display !== 'none' && lv.style.display !== '') doLogin();
+    else doRegister();
+  }
+});
+
+// ── Check already logged in ───────────────────────────────
+if (sessionStorage.getItem('kb_user')) {
+  window.location.href = 'index.html';
+}
+</script>
+</body>
+</html>
