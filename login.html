@@ -273,7 +273,7 @@ function doRegister() {
   if (!username || !name || !pwd) { errEl.textContent = '请填写所有字段'; return; }
   if (pwd.length < 6) { errEl.textContent = '密码至少 6 位'; return; }
   if (pwd !== pwd2) { errEl.textContent = '两次密码不一致'; return; }
-  if (!/^[a-zA-Z0-9_\u4e00-\u9fa5]{2,20}$/.test(username)) { errEl.textContent = '用户名 2-20 位，仅支持字母数字下划线汉字'; return; }
+  if (!/^[\u4e00-\u9fa5a-zA-Z0-9_]{2,20}$/.test(username)) { errEl.textContent = '用户名 2-20 位，支持中文、字母、数字、下划线'; return; }
   const accounts = getAccounts();
   if (accounts.find(a => a.username === username)) { errEl.textContent = '该用户名已被注册'; return; }
   accounts.push({ username, password: btoa(pwd), name, role: 'user', approved: false });

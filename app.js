@@ -98,6 +98,27 @@ function showHome() {
       }).join('')
     : '';
 
+  // 高频场景
+  const highFreqScens = [];
+  if (state.activeModule === 'all') {
+    data.modules.forEach(mod => mod.categories.forEach(cat => cat.scenarios.forEach(s => {
+      if (HIGH_FREQ_IDS.includes(s.id)) highFreqScens.push({cat, s});
+    })));
+  }
+  const highFreqHtml = highFreqScens.length ? `
+    <div class="page-header" style="margin-top:8px"><h2>⚡ 高频场景</h2><p style="font-size:12px;color:var(--text-secondary)">最常处理的场景，快速直达</p></div>
+    <div class="hf-grid">
+      ${highFreqScens.map(({cat,s})=>`
+        <div class="hf-card risk-border-${s.risk}" onclick="showScenario('${cat.id}','${s.id}')">
+          <div class="hf-top">
+            <span class="hf-title">${s.title}</span>
+            <span class="risk-badge risk-${s.risk}">${{high:'高风险',mid:'中风险',low:'低风险'}[s.risk]}</span>
+          </div>
+          <div class="hf-cat">${cat.icon} ${cat.name}</div>
+          ${s.flow?.length ? `<div class="hf-step">第一步：${s.flow[0].step}</div>` : ''}
+        </div>`).join('')}
+    </div>` : '';
+
   const cv = document.getElementById('category-view');
   cv.style.display = 'block';
   cv.innerHTML = `
@@ -108,7 +129,8 @@ function showHome() {
       <div class="stat-card"><div class="stat-num">24h</div><div class="stat-label">全天值守</div></div>
     </div>
     ${moduleCards ? `<div class="module-grid">${moduleCards}</div>` : ''}
-    <div class="page-header"><h2>${state.activeModule==='all'?'全部分类':(data.modules.find(m=>m.id===state.activeModule)?.name||'')}</h2></div>
+    ${highFreqHtml}
+    <div class="page-header" style="margin-top:8px"><h2>${state.activeModule==='all'?'全部分类':(data.modules.find(m=>m.id===state.activeModule)?.name||'')}</h2></div>
     <div class="card-grid">
       ${filteredCats.map(cat=>`
         <div class="cat-card" onclick="showCategory('${cat.id}')">
