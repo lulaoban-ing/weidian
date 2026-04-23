@@ -4,6 +4,35 @@ const _kbUser = (()=>{
 })();
 if (!_kbUser) { window.location.replace('login.html'); }
 
+const RED_ROLES = ['客服', 'AI客服', '值班店长'];
+const BLUE_ROLES = ['班长'];
+const ORANGE_ROLES = ['稽查'];
+function getRoleColor(role) {
+  if (RED_ROLES.includes(role)) return 'red';
+  if (BLUE_ROLES.includes(role)) return 'blue';
+  if (ORANGE_ROLES.includes(role)) return 'orange';
+  return 'gray';
+}
+function renderFlow(flow) {
+  if (!flow?.length) return '';
+  const rows = [];
+  flow.forEach(f => {
+    const role = f.role || '操作';
+    const last = rows[rows.length - 1];
+    if (last && last.role === role) last.steps.push(f.step);
+    else rows.push({ role, steps: [f.step] });
+  });
+  return `<div class="flow-role-rows">${rows.map(r => {
+    const c = getRoleColor(r.role);
+    return `<div class="flow-role-row role-${c}">
+      <div class="flow-role-label ${c}">${r.role}</div>
+      <div class="flow-role-steps">${r.steps.map((s,j) =>
+        `<div class="flow-role-card ${c}">${s}</div>${j<r.steps.length-1?'<span class="flow-role-arrow">→</span>':''}`
+      ).join('')}</div>
+    </div>`;
+  }).join('')}</div>`;
+}
+
 let state = {
   isAdmin: _kbUser?.role === 'admin',
   currentCategory: null,
@@ -230,16 +259,7 @@ function showScenario(catId, scenarioId) {
     ${s.flow?.length?`
     <div class="section-card">
       <h4><span class="section-icon">📋</span>处理流程</h4>
-      <div class="flow-steps${s.flow.length>4?' flow-vertical':''}">
-        ${s.flow.map((f,i)=>`
-          <div class="flow-step">
-            <div class="flow-card">
-              <div class="step-num">${i+1}</div>
-              <div class="step-content">${f.step}</div>
-            </div>
-            ${i<s.flow.length-1?'<span class="flow-arrow">→</span>':''}
-          </div>`).join('')}
-      </div>
+      ${renderFlow(s.flow)}
     </div>`:''}
     ${s.scripts?.length?`
     <div class="section-card">
@@ -396,8 +416,8 @@ function openEdit(catId, scenarioId) {
       </select>
     </div>
     <div class="form-group"><label>关键词（逗号分隔）</label><input id="edit-keywords" value="${(s.keywords||[]).join(',')}"></div>
-    <div class="form-group"><label>处理流程（每行一步）</label>
-      <textarea id="edit-flow">${(s.flow||[]).map(f=>f.step).join('\n')}</textarea>
+    <div class="form-group"><label>处理流程（格式：角色|步骤内容，每行一步）</label>
+      <textarea id="edit-flow">${(s.flow||[]).map(f=>`${f.role||''}|${f.step}`).join('\n')}</textarea>
     </div>
     <div class="form-group"><label>参考话术（格式：标签|话术内容，每行一条）</label>
       <textarea id="edit-scripts">${(s.scripts||[]).map(sc=>sc.label+'|'+sc.text).join('\n')}</textarea>
@@ -424,7 +444,9 @@ function saveScenario() {
   s.title = document.getElementById('edit-title').value.trim();
   s.risk = document.getElementById('edit-risk').value;
   s.keywords = document.getElementById('edit-keywords').value.split(',').map(k=>k.trim()).filter(Boolean);
-  s.flow = document.getElementById('edit-flow').value.split('\n').map(l=>l.trim()).filter(Boolean).map(step=>({step}));
+  s.flow = document.getElementById('edit-flow').value.split('\n').map(l=>l.trim()).filter(Boolean).map(l=>{
+    const [role,...rest] = l.split('|'); return {role:role.trim(), step:rest.join('|').trim()};
+  });
   s.scripts = document.getElementById('edit-scripts').value.split('\n').map(l=>l.trim()).filter(Boolean).map(l=>{
     const [label,...rest] = l.split('|'); return {label:label.trim(), text:rest.join('|').trim()};
   });

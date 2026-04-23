@@ -184,6 +184,24 @@ body{font-family:-apple-system,BlinkMacSystemFont,'PingFang SC','Microsoft YaHei
   .flow-steps:not(.flow-vertical) .flow-card{flex-direction:row;max-width:100%;width:100%;text-align:left;align-items:center;gap:10px}
   .flow-steps:not(.flow-vertical) .flow-arrow{transform:rotate(90deg);padding:2px 0}
 }
+.flow-role-rows{display:flex;flex-direction:column;gap:8px}
+.flow-role-row{display:flex;align-items:center;gap:0;padding:6px 10px;border-radius:8px}
+.flow-role-row.role-red{background:#fff0f0;border:1px solid #ffc5c5}
+.flow-role-row.role-blue{background:#f0f5ff;border:1px solid #c5d5ff}
+.flow-role-row.role-orange{background:#fff7f0;border:1px solid #ffd5b0}
+.flow-role-row.role-gray{background:#f7f7f7;border:1px solid #e0e0e0}
+.flow-role-label{font-size:11px;font-weight:700;padding:3px 8px;border-radius:6px;white-space:nowrap;min-width:44px;text-align:center;margin-right:10px;flex-shrink:0}
+.flow-role-label.red{background:#e63946;color:#fff}
+.flow-role-label.blue{background:#1677ff;color:#fff}
+.flow-role-label.orange{background:#fa8c16;color:#fff}
+.flow-role-label.gray{background:#999;color:#fff}
+.flow-role-steps{display:flex;align-items:center;flex-wrap:wrap;gap:0}
+.flow-role-card{font-size:12px;padding:4px 10px;border-radius:6px;border:1px solid}
+.flow-role-card.red{background:#fff;border-color:#e63946;color:#c1121f;font-weight:500}
+.flow-role-card.blue{background:#fff;border-color:#1677ff;color:#1677ff}
+.flow-role-card.orange{background:#fff;border-color:#fa8c16;color:#d46b08}
+.flow-role-card.gray{background:#fff;border-color:#ccc;color:#555}
+.flow-role-arrow{font-size:14px;padding:0 4px;flex-shrink:0;color:#ccc}
 
 .script-box{background:#f0f8ff;border-left:3px solid var(--primary);border-radius:0 6px 6px 0;padding:10px 14px;margin:6px 0}
 .script-label{font-size:11px;color:var(--primary-dark);font-weight:600;margin-bottom:4px}

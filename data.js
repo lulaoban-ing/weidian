@@ -20,8 +20,8 @@ const KB_DATA = {
           icon: '🚨',
           desc: '偷盗识别、风险预警、身份核实',
           scenarios: [
-            {id:'theft-instore',title:'店内小型偷盗',risk:'high',tags:['偷盗','资金安全'],keywords:['偷','盗','藏商品','夹带'],criteria:'发现偷盗行为',flow:[{step:'按L键强制锁门'},{step:'复制店铺信息'},{step:'备注详情'},{step:'转交二线'},{step:'上报班长'}],scripts:[],transferCondition:'立即转二线+上报班长',notes:'高风险必须上报班长',needReport:true},
-            {id:'theft-door',title:'倚门盗抢',risk:'high',tags:['盗抢','人身安全'],keywords:['抢','门口','盗抢','强抢'],criteria:'门口发生盗抢',flow:[{step:'复制店铺信息'},{step:'备注详情'},{step:'转交二线'},{step:'上报班长'}],scripts:[],transferCondition:'立即转二线+上报班长',notes:'倚门盗抢不锁门，避免冲突',needReport:true},
+            {id:'theft-instore',title:'店内小型偷盗',risk:'high',tags:['偷盗','资金安全'],keywords:['偷','盗','藏商品','夹带'],criteria:'发现偷盗行为',flow:[{role:'客服',step:'按L键强制锁门'},{role:'客服',step:'复制店铺信息'},{role:'客服',step:'备注详情'},{role:'客服',step:'转交二线'},{role:'值班店长',step:'上报班长'}],scripts:[],transferCondition:'立即转二线+上报班长',notes:'高风险必须上报班长',needReport:true},
+            {id:'theft-door',title:'倚门盗抢',risk:'high',tags:['盗抢','人身安全'],keywords:['抢','门口','盗抢','强抢'],criteria:'门口发生盗抢',flow:[{role:'客服',step:'复制店铺信息'},{role:'客服',step:'备注详情'},{role:'客服',step:'转交二线'},{role:'值班店长',step:'上报班长'}],scripts:[],transferCondition:'立即转二线+上报班长',notes:'倚门盗抢不锁门，避免冲突',needReport:true},
             {id:'underpay',title:'少付/漏付',risk:'high',tags:['资金风险'],keywords:['少付','漏付','没付全'],criteria:'实际支付少于应付',flow:[{step:'按L键锁门'},{step:'转交二线处理'}],scripts:[],transferCondition:'立即转二线+锁门',notes:'高风险必须锁门',needReport:true},
             {id:'merchant-code',title:'扫描商家收款码',risk:'mid',tags:['私码'],keywords:['商家码','老板码','私人码'],criteria:'顾客扫了商家私人码',flow:[{step:'引导在POS机重新支付'},{step:'顾客拒绝则上报班长'}],scripts:[{label:'引导',text:'辛苦您在POS机上重新支付，不然门无法打开，多付款项我们会联系商家退还。'}],transferCondition:'顾客拒绝则上报',notes:'',needReport:true},
             {id:'minor-cigarette',title:'未成年购买香烟',risk:'high',tags:['特殊人群','合规'],keywords:['未成年','学生','买烟'],criteria:'疑似未成年购烟',flow:[{step:'主动介入询问年龄'},{step:'要求出示身份证'},{step:'未满18岁拒绝售卖'}],scripts:[{label:'询问',text:'您好，购买香烟需要年满18周岁，请问您满18岁了吗？请出示您的身份证。'}],transferCondition:'顾客拒不配合转二线',notes:'',identifyTips:['穿校服','背书包','身高矮小','面部稚嫩'],needReport:false},
@@ -37,7 +37,7 @@ const KB_DATA = {
           desc: '不当行为制止、滞留处理、特殊情况应对',
           scenarios: [
             {id:'smoking',title:'顾客在店内吸烟',risk:'mid',tags:['主动服务','安全','禁止行为'],keywords:['吸烟','抽烟','点烟','打火机'],criteria:'发现顾客在店内吸烟',flow:[{step:'立即介入制止'},{step:'使用标准话术提醒'}],scripts:[{label:'制止话术',text:'本店禁止吸烟，请您将香烟熄灭至店外，感谢您的配合。'}],transferCondition:'顾客拒不配合则转二线',notes:'',identifyTips:['顾客手持香烟','闻到烟味','看到烟雾'],needReport:false},
-            {id:'long-stay',title:'顾客长时间在店',risk:'low',tags:['主动服务','滞留'],keywords:['长时间','一直在','不走','滞留','待很久'],criteria:'顾客在店超过正常购物时间',flow:[{step:'主动询问顾客诉求'},{step:'根据回复进行相应处理'}],scripts:[{label:'询问话术',text:'请问有什么可以帮到您的？'}],transferCondition:'顾客有特殊需求则转二线',notes:'',needReport:false},
+            {id:'long-stay',title:'顾客长时间在店',risk:'low',tags:['主动服务','滞留'],keywords:['长时间','一直在','不走','滞留','待很久'],criteria:'顾客在店超过正常购物时间',flow:[{role:'客服',step:'主动询问顾客诉求'},{role:'客服',step:'根据回复进行相应处理'}],scripts:[{label:'询问话术',text:'请问有什么可以帮到您的？'}],transferCondition:'顾客有特殊需求则转二线',notes:'',needReport:false},
             {id:'child-pet',title:'顾客携带儿童/宠物进店',risk:'low',tags:['主动服务','安全'],keywords:['小孩','儿童','宠物','狗','猫','宝宝'],criteria:'发现儿童或宠物进店',flow:[{step:'及时介入提醒'}],scripts:[{label:'儿童提醒',text:'请您看顾好您的小朋友，避免磕伤碰伤。'},{label:'宠物提醒',text:'本店禁止宠物入内，请将宠物带离至店外。'}],transferCondition:'无需转人工',notes:'',needReport:false},
             {id:'unpack-goods',title:'未支付商品拆封',risk:'mid',tags:['商品破坏'],keywords:['拆开','拆封','撕开'],criteria:'发现顾客拆封未付款商品',flow:[{step:'立即介入提醒付款'},{step:'顾客拒付则转二线'}],scripts:[{label:'制止',text:'请您先移步至收银台将商品扫码付款再进行使用。'}],transferCondition:'顾客拒付立即转二线',notes:'情趣用品一经拆包必须购买',needReport:false}
           ]
