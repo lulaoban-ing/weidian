@@ -394,7 +394,7 @@ function addScenario() {
     needReport: document.getElementById('add-report').value === 'true'
   };
   cat.scenarios.push(newScen);
-  saveData(data, { op: 'add', desc: `新增场景：${title}`, catName: cat.name, after: newScen });
+  saveData(data, { op: 'add', desc: `新增场景：${title}`, catName: cat.name, catId, scenarioId: newScen.id, after: newScen });
   renderSidebar();
   alert('新增成功！');
   showTab('knowledge');
@@ -469,7 +469,7 @@ function saveEdit(catId, scenId) {
   s.transferCondition = document.getElementById('m-transfer').value.trim();
   s.notes = document.getElementById('m-notes').value.trim();
   const diffs = diffScenario(before, s);
-  saveData(data, { op:'edit', desc:`编辑场景：${s.title}`, catName: cat.name, before, after: s, diffs });
+  saveData(data, { op:'edit', desc:`编辑场景：${s.title}`, catName: cat.name, catId, scenarioId, before, after: s, diffs });
   closeModal();
   renderSidebar();
   renderKnowledge();
@@ -486,7 +486,7 @@ function deleteScenario(catId, scenId) {
   const { cat: nc } = findCat(newData, catId);
   const deleted = JSON.parse(JSON.stringify(s));
   nc.scenarios = nc.scenarios.filter(sc=>sc.id!==scenId);
-  saveData(newData, { op:'del', desc:`删除场景：${s.title}`, catName: cat.name, before: deleted });
+  saveData(newData, { op:'del', desc:`删除场景：${s.title}`, catName: cat.name, catId, scenarioId: scenId, before: deleted });
   renderSidebar();
   renderKnowledge();
 }
@@ -537,6 +537,10 @@ function renderHistory() {
             <span class="history-op ${opCls[op]}">${opLabel[op]||op}</span>
             <span class="history-user">${h.user||'系统'}</span>
             <span style="font-size:11px;color:#ccc;margin-left:4px">▼</span>
+            <div style="margin-left:auto;display:flex;gap:6px" onclick="event.stopPropagation()">
+              ${h.catId&&h.scenarioId&&op!=='del'?`<button class="btn btn-default btn-sm" onclick="openEdit('${h.catId}','${h.scenarioId}')">编辑</button>`:''}
+              ${h.catId&&h.scenarioId&&op!=='del'?`<button class="btn btn-danger btn-sm" onclick="deleteScenario('${h.catId}','${h.scenarioId}')">删除</button>`:''}
+            </div>
           </div>
           <div class="history-detail" id="hd-${i}">${detailHtml||'<span style="color:var(--text-secondary);font-size:12px">无详细记录</span>'}</div>
         </div>`;
