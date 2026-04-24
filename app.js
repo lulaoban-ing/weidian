@@ -75,6 +75,7 @@ function getFilteredCategories() {
 function renderNav(filter) {
   const data = getData();
   const seen = JSON.parse(localStorage.getItem('kb_updates_seen') || '{}');
+  const updates = JSON.parse(localStorage.getItem('kb_updates') || '[]');
   const tree = document.getElementById('nav-tree');
 
   let modules;
@@ -91,7 +92,10 @@ function renderNav(filter) {
         ? cat.scenarios.filter(s => matchSearch(s, filter))
         : cat.scenarios;
       if (filter && !scenarios.length) return '';
-      const hasUpdate = !seen[cat.id];
+      const hasUpdate = cat.scenarios.some(s => {
+        const upd = updates.find(u => u.scenarioId === s.id);
+        return upd && (!seen[s.id] || seen[s.id] < upd.time);
+      });
       return `<div class="nav-l1 ${state.currentCategory===cat.id?'open':''}" id="nav-${cat.id}">
         <div class="nav-l1-label" onclick="toggleNav('${cat.id}')">
           <span class="arrow">▶</span>
@@ -246,9 +250,9 @@ function showCategory(catId) {
 function showScenario(catId, scenarioId) {
   state.currentCategory = catId;
   state.currentScenario = scenarioId;
-  // 标记该目录更新为已读
+  // 标记该场景更新为已读
   const seen = JSON.parse(localStorage.getItem('kb_updates_seen') || '{}');
-  seen[catId] = Date.now();
+  seen[scenarioId] = Date.now();
   localStorage.setItem('kb_updates_seen', JSON.stringify(seen));
   document.getElementById('search-results').className = '';
   document.getElementById('category-view').style.display = 'none';
@@ -264,6 +268,9 @@ function showScenario(catId, scenarioId) {
   const s = cat?.scenarios.find(sc=>sc.id===scenarioId);
   if (!s) return;
   const riskLabel = {high:'高风险',mid:'中风险',low:'低风险'}[s.risk];
+  const allUpdates = JSON.parse(localStorage.getItem('kb_updates') || '[]');
+  const lastUpd = allUpdates.find(u => u.scenarioId === scenarioId);
+  const lastUpdHtml = lastUpd ? `<span class="meta-update-time">🕐 最近更新：${new Date(lastUpd.time).toLocaleString('zh-CN',{year:'numeric',month:'2-digit',day:'2-digit',hour:'2-digit',minute:'2-digit'})}</span>` : '';
   const sv = document.getElementById('scenario-view');
   sv.style.display = 'block';
   sv.innerHTML = `
@@ -280,6 +287,7 @@ function showScenario(catId, scenarioId) {
         <span class="risk-badge risk-${s.risk}">${riskLabel}</span>
         ${s.needReport?`<span class="risk-badge risk-high">需上报班长</span>`:''}
         ${s.tags.map(t=>`<span class="meta-tag">${t}</span>`).join('')}
+        ${lastUpdHtml}
       </div>
       ${s.criteria?`<div style="font-size:13px;color:#555;margin-top:8px">触发条件：${s.criteria}</div>`:''}
       ${s.notes?`<div class="warning-box"><strong>注意：</strong>${s.notes}</div>`:""}
@@ -484,9 +492,9 @@ function saveScenario() {
   const updates = JSON.parse(localStorage.getItem('kb_updates') || '[]');
   updates.unshift({catId, scenarioId, title: s.title, time: Date.now()});
   localStorage.setItem('kb_updates', JSON.stringify(updates.slice(0, 50)));
-  // 标记该目录有未读更新
+  // 标记该场景有未读更新
   const seen = JSON.parse(localStorage.getItem('kb_updates_seen') || '{}');
-  delete seen[catId];
+  delete seen[scenarioId];
   localStorage.setItem('kb_updates_seen', JSON.stringify(seen));
   closeAdminPanel();
   showScenario(catId, scenarioId);
