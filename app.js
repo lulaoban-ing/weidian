@@ -57,7 +57,7 @@ function saveData(data) {
 function filterModule(moduleId) {
   state.activeModule = moduleId;
   document.querySelectorAll('.mod-tab').forEach(t => t.classList.remove('active'));
-  const tabMap = { 'all':'tab-all', 'ai-watching':'tab-ai', 'store-manager':'tab-sm', 'system-devices':'tab-sys', 'training-standards':'tab-tr' };
+  const tabMap = { 'all':'tab-all', 'ai-watching':'tab-ai', 'duty-manager':'tab-sm', 'scenarios':'tab-sc', 'system-device':'tab-sys', 'tools-norms':'tab-tn', 'special-zone':'tab-sp' };
   document.getElementById(tabMap[moduleId])?.classList.add('active');
   showHome();
 }
