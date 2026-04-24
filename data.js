@@ -4,15 +4,15 @@ const HIGH_FREQ_IDS = [
 ];
 
 const KB_DATA = {
-  version: '6.0',
-  lastUpdate: '2026-04-22',
+  version: '7.0',
+  lastUpdate: '2026-04-24',
   modules: [
     {
       id: 'ai-watching',
       name: 'AI 值守专区',
       icon: '🤖',
       color: 'primary',
-      desc: 'AI 值守岗位专用：远程监控、实时响应、系统操作',
+      desc: 'AI 值守岗位专用：远程监控、实时响应、异常处理',
       categories: [
         {
           id: 'ai-risk',
@@ -38,232 +38,246 @@ const KB_DATA = {
           scenarios: [
             {id:'smoking',title:'顾客在店内吸烟',risk:'mid',tags:['主动服务','安全','禁止行为'],keywords:['吸烟','抽烟','点烟','打火机'],criteria:'发现顾客在店内吸烟',flow:[{step:'立即介入制止'},{step:'使用标准话术提醒'}],scripts:[{label:'制止话术',text:'本店禁止吸烟，请您将香烟熄灭至店外，感谢您的配合。'}],transferCondition:'顾客拒不配合则转二线',notes:'',identifyTips:['顾客手持香烟','闻到烟味','看到烟雾'],needReport:false},
             {id:'long-stay',title:'顾客长时间在店',risk:'low',tags:['主动服务','滞留'],keywords:['长时间','一直在','不走','滞留','待很久'],criteria:'顾客在店超过正常购物时间',flow:[{role:'客服',step:'主动询问顾客诉求'},{role:'客服',step:'根据回复进行相应处理'}],scripts:[{label:'询问话术',text:'请问有什么可以帮到您的？'}],transferCondition:'顾客有特殊需求则转二线',notes:'',needReport:false},
-            {id:'child-pet',title:'顾客携带儿童/宠物进店',risk:'low',tags:['主动服务','安全'],keywords:['小孩','儿童','宠物','狗','猫','宝宝'],criteria:'发现儿童或宠物进店',flow:[{step:'及时介入提醒'}],scripts:[{label:'儿童提醒',text:'请您看顾好您的小朋友，避免磕伤碰伤。'},{label:'宠物提醒',text:'本店禁止宠物入内，请将宠物带离至店外。'}],transferCondition:'无需转人工',notes:'',needReport:false},
-            {id:'unpack-goods',title:'未支付商品拆封',risk:'mid',tags:['商品破坏'],keywords:['拆开','拆封','撕开'],criteria:'发现顾客拆封未付款商品',flow:[{step:'立即介入提醒付款'},{step:'顾客拒付则转二线'}],scripts:[{label:'制止',text:'请您先移步至收银台将商品扫码付款再进行使用。'}],transferCondition:'顾客拒付立即转二线',notes:'情趣用品一经拆包必须购买',needReport:false}
+            {id:'child-pet',title:'顾客携带儿童/宠物进店',risk:'low',tags:['主动服务','安全'],keywords:['小孩','儿童','宠物','狗','猫','宝宝'],criteria:'发现儿童或宠物进店',flow:[{step:'及时介入提醒'}],scripts:[{label:'儿童提醒',text:'请您看顾好您的小朋友，避免磕伤碰伤。'},{label:'宠物提醒',text:'本店禁止宠物入内，请将宠物带离至店外。'}],transferCondition:'无需转人工',notes:'',needReport:false}
           ]
         },
         {
-          id: 'ai-payment',
-          name: '商品与支付',
-          icon: '💳',
-          desc: '支付异常、条码问题、多付少付处理',
-          scenarios: [
-            {id:'ask-payment',title:'顾客询问付款方式',risk:'low',tags:['被动服务','支付引导'],keywords:['怎么付款','怎么支付','付款方式','怎么买'],criteria:'顾客不知道如何支付',flow:[{step:'引导顾客至收银台'},{step:'说明扫码加购流程'},{step:'引导出示付款码支付'}],scripts:[{label:'支付引导',text:'请您移步至收银台，将商品条形码对准扫码盒加购，加购完商品后，出示付款码对准扫码盒支付即可。'}],transferCondition:'无需转人工',notes:'',needReport:false},
-            {id:'balance-insufficient',title:'余额不足/支付失败',risk:'low',tags:['支付'],keywords:['余额不足','支付失败','没钱'],criteria:'支付时提示余额不足',flow:[{step:'引导更换支付方式'}],scripts:[{label:'话术',text:'支付失败，您更换一下支付方式再次尝试。'}],transferCondition:'无需转人工',notes:'',needReport:false},
-            {id:'overpay',title:'多付/重复支付',risk:'mid',tags:['资金风险'],keywords:['多付','重复付','付了两次'],criteria:'支付金额超出应付',flow:[{step:'备注事件'},{step:'转交二线'}],scripts:[],transferCondition:'转二线处理退款',notes:'',needReport:false},
-            {id:'barcode-unreadable',title:'商品条形码无法识别',risk:'low',tags:['商品问题','条形码'],keywords:['扫不上','扫不出','条形码'],criteria:'顾客扫码时POS机无法识别',flow:[{step:'引导重新扫描'},{step:'遮挡二维码尝试'}],scripts:[{label:'话术',text:'商品条形码没有扫全，辛苦您再扫一下。如果旁边有二维码，您将二维码遮挡一下就可以扫描成功了。'}],transferCondition:'无法解决则转二线',notes:'',needReport:false},
-            {id:'multi-goods',title:'顾客购买多件商品（6件及以上）',risk:'low',tags:['主动服务','多件商品','防漏付'],keywords:['多件','好多','一堆','六大件'],criteria:'顾客购买商品数量达6件及以上',flow:[{step:'主动提醒顾客逐件扫码'},{step:'利用利己心理引导'}],scripts:[{label:'提醒话术',text:'为了避免您多付，请您一件一件扫码加购，核对好数量后，再进行付款。'}],transferCondition:'无需转人工',notes:'',needReport:false}
-          ]
-        },
-        {
-          id: 'ai-shift',
-          name: '交接班流程',
+          id: 'ai-transfer',
+          name: '转交规范',
           icon: '🔄',
-          desc: '上线准备、下班交接、班次切换',
+          desc: 'AI值守转交二线的判断标准与操作规范',
           scenarios: [
-            {id:'ai-pre-shift',title:'上线前准备',risk:'low',tags:['AI操作','上线'],keywords:['上线','准备','登录'],criteria:'开始值守前',flow:[{step:'检查设备：鼠标、耳机、键盘、主副屏、主机、摄像头'},{step:'打开四个软件：企业微信、谷歌浏览器、PhotoBooth、AI值守工作台'},{step:'调整摄像头角度，保持人物居中，微笑服务'},{step:'调整系统输入音量至最大'},{step:'确认大屏为主显示器'},{step:'登录 AI 值守工作台账号'},{step:'登录客服后台账号'},{step:'按 F 键唤起界面，点击"下班"切换为在线状态'},{step:'首次上线需录制语音包'}],scripts:[],transferCondition:'无需转人工',notes:'语音包录制：环境安静后录制，每人仅有十次机会，声音不低于20秒',needReport:false},
-            {id:'ai-shift-end',title:'下班/休息店铺交接',risk:'low',tags:['AI操作','交接','下班'],keywords:['下班','挂起','排休','交接'],criteria:'需要下班或休息',flow:[{step:'按 F 键唤起控制台'},{step:'点击"下班"/"排休"/"挂起"对应按钮'},{step:'系统停止分配新店铺，处理完当前所有店铺后方可离席'},{step:'值班店长转交的店铺：商家在店/店内休息均可直接释放'},{step:'系统分配的店铺：无异常按常规流程，有异常转二线'}],scripts:[],transferCondition:'无需转人工',notes:'点击下班后系统只停止分配，必须将屏幕上所有店铺处理完毕才能离席',needReport:false},
-            {id:'ai-false-alarm',title:'AI 识别异常-误报处理',risk:'low',tags:['AI操作','误报'],keywords:['误报','识别错误','标红'],criteria:'系统标红但实际无异常',flow:[{step:'查看工作台左上角异常描述'},{step:'结合监控画面判断是否真实异常'},{step:'确认为误报后点击"误报"按键'},{step:'按常规流程继续值守'}],scripts:[],transferCondition:'确认真实异常则转二线',notes:'误报按键仅在系统识别异常后出现，点击后按常规流程值守',needReport:false},
-            {id:'direct-transfer',title:'转交二线流程',risk:'high',tags:['直接转交','高风险'],keywords:['偷盗','少付','多付','骑手','制服','醉酒','投诉','媒体','着火','损坏'],criteria:'高风险、紧急/敏感情况',flow:[{step:'识别高风险场景'},{step:'复制店铺信息'},{step:'备注情况（选择对应标签+文字说明）'},{step:'转交二线值班店长'},{step:'高风险事件必须上报班长'}],scripts:[{label:'统一话术',text:'这边为您转接专员处理，请您稍等。'}],transferCondition:'立即转二线+上报班长',notes:'人身安全/财产安全/舆情/偷盗完成备注转人工后，必须上报班长',needReport:true},
-            {id:'transfer-fail',title:'转人工失败处理',risk:'mid',tags:['转人工','失败处理'],keywords:['转人工失败','无法转接'],criteria:'点击转人工后失败',flow:[{step:'需补标的（偷盗/少付/漏付/多付）：提供店铺ID+事件+时间+顾客手机号上报班长'},{step:'其他转人工失败：记录信息，上报班长处理'}],scripts:[],transferCondition:'上报班长',notes:'',needReport:true}
-          ]
-        },
-        {
-          id: 'ai-scripts',
-          name: '话术参考',
-          icon: '💬',
-          desc: 'AI 值守常用标准话术',
-          scenarios: [
-            {id:'greeting-basic',title:'基础问候话术',risk:'low',tags:['话术','问候'],keywords:['你好','欢迎','问候'],criteria:'顾客进店',flow:[{step:'及时问候'},{step:'询问需求'}],scripts:[{label:'标准问候',text:'您好，欢迎光临，请问有什么可以帮您？'},{label:'简洁问候',text:'您好，有什么可以帮您？'}],transferCondition:'无需转人工',notes:'',needReport:false},
-            {id:'apology-basic',title:'基础致歉话术',risk:'low',tags:['话术','致歉'],keywords:['抱歉','对不起','不好意思'],criteria:'需要致歉',flow:[{step:'诚恳致歉'},{step:'说明原因'},{step:'提供解决方案'}],scripts:[{label:'标准致歉',text:'实在抱歉给您带来不便，我们会尽快处理。'},{label:'深度致歉',text:'非常抱歉，这是我们的疏忽，我们会立即为您解决。'}],transferCondition:'顾客不满意转二线',notes:'',needReport:false},
-            {id:'complaint-handling',title:'投诉处理话术',risk:'mid',tags:['话术','投诉'],keywords:['投诉','不满','差评'],criteria:'顾客投诉',flow:[{step:'耐心倾听'},{step:'表示理解'},{step:'致歉并说明处理方案'},{step:'跟进处理'}],scripts:[{label:'安抚话术',text:'非常理解您的心情，给您带来不好的体验我们深表歉意，我们会认真处理您的问题。'}],transferCondition:'严重投诉立即上报',notes:'',needReport:true}
+            {id:'transfer-full',title:'完全转交',risk:'low',tags:['转交','流程'],keywords:['完全转交','全部转交'],criteria:'AI无法处理需完全转交',flow:[{step:'判断是否属于完全转交场景'},{step:'复制店铺信息'},{step:'详细备注情况'},{step:'点击转交二线按钮'}],scripts:[],transferCondition:'AI完全无法处理的场景',notes:'包括：商家主动求助、设备故障、复杂纠纷等',needReport:false},
+            {id:'transfer-partial',title:'部分转交',risk:'low',tags:['转交','流程'],keywords:['部分转交','协助处理'],criteria:'AI处理后仍需二线介入',flow:[{step:'AI先行处理基础问题'},{step:'记录已处理内容'},{step:'备注需二线协助的具体事项'},{step:'转交二线'}],scripts:[],transferCondition:'AI已处理部分，剩余需人工',notes:'如：AI已引导支付，但顾客仍有疑问需解释',needReport:false},
+            {id:'transfer-direct',title:'直接转交',risk:'low',tags:['转交','流程'],keywords:['直接转交','立即转交'],criteria:'高风险场景需立即转交',flow:[{step:'识别高风险场景'},{step:'立即锁门（如需要）'},{step:'快速备注关键信息'},{step:'立即转交二线'}],scripts:[],transferCondition:'偷盗、少付、人身安全等高风险',notes:'争分夺秒，先转交再补充详情',needReport:true}
           ]
         }
       ]
     },
     {
-      id: 'store-manager',
+      id: 'duty-manager',
       name: '值班店长专区',
-      icon: '🏪',
+      icon: '👔',
       color: 'warning',
-      desc: '值班店长岗位专用：到店处理、顾客接待、商品管理',
+      desc: '值班店长专用：场景处理、顾客纠纷、特殊商品管理',
       categories: [
         {
-          id: 'sm-risk',
-          name: '异常与风险',
+          id: 'dm-payment',
+          name: '支付与结算',
+          icon: '💳',
+          desc: '多付、少付、支付异常、退款处理',
+          scenarios: [
+            {id:'overpay',title:'顾客多付款',risk:'mid',tags:['支付','退款'],keywords:['多付','多扣','付多了','退钱'],criteria:'顾客实际支付超过商品金额',flow:[{step:'核实支付记录'},{step:'联系商家确认退款'},{step:'告知顾客退款时效'}],scripts:[{label:'安抚',text:'您好，我们已核实您的支付情况，会联系商家在1-3个工作日内退还多付金额，请您放心。'}],transferCondition:'商家不配合退款则上报班长',notes:'',needReport:false},
+            {id:'ask-payment',title:'顾客询问支付方式',risk:'low',tags:['支付','引导'],keywords:['怎么付','如何支付','付款方式','扫码'],criteria:'顾客不知道如何支付',flow:[{step:'引导顾客扫描POS机二维码'},{step:'确认支付成功后开门'}],scripts:[{label:'引导',text:'您好，请扫描收银台上的二维码进行支付，支付成功后门会自动打开。'}],transferCondition:'无需转人工',notes:'',needReport:false},
+            {id:'pos-breakdown',title:'POS机故障',risk:'high',tags:['设备','支付'],keywords:['POS坏了','收银机','刷卡机','不能付款'],criteria:'POS机无法正常使用',flow:[{step:'引导顾客使用备用支付方式'},{step:'备注故障情况'},{step:'通知商家处理设备'}],scripts:[{label:'引导',text:'非常抱歉，收银设备暂时出现故障，请您使用手机扫码支付，给您带来不便深表歉意。'}],transferCondition:'无法解决立即转二线',notes:'',needReport:true},
+            {id:'refund-request',title:'顾客要求退款',risk:'mid',tags:['退款','售后'],keywords:['退款','退钱','不想要了'],criteria:'顾客购买后要求退款',flow:[{step:'了解退款原因'},{step:'核实购买记录'},{step:'联系商家处理'}],scripts:[{label:'受理',text:'您好，请问您需要退款的原因是什么？我们会帮您联系商家处理。'}],transferCondition:'商家拒绝退款则上报班长',notes:'',needReport:false}
+          ]
+        },
+        {
+          id: 'dm-special',
+          name: '特殊商品管理',
+          icon: '🚬',
+          desc: '香烟、酒类、处方药等特殊商品的销售管控',
+          scenarios: [
+            {id:'alcohol-minor',title:'未成年购买酒类',risk:'high',tags:['特殊人群','合规'],keywords:['未成年','学生','买酒'],criteria:'疑似未成年购买酒类',flow:[{step:'主动介入询问年龄'},{step:'要求出示身份证'},{step:'未满18岁拒绝售卖'}],scripts:[{label:'询问',text:'您好，购买酒类需��年满18周岁，请问您满18岁了吗？请出示您的身份证。'}],transferCondition:'顾客拒不配合转二线',notes:'',identifyTips:['穿校服','背书包','身高矮小','面部稚嫩'],needReport:false},
+            {id:'prescription-drug',title:'购买处方药',risk:'high',tags:['合规','处方药'],keywords:['处方药','需要处方','开方'],criteria:'顾客购买需处方的药品',flow:[{step:'询问是否有处方'},{step:'无处方拒绝售卖'},{step:'引导去医院开具处方'}],scripts:[{label:'拒绝',text:'您好，该药品属于处方药，需要凭医生处方才能购买，请您前往医院就诊后凭处方购买。'}],transferCondition:'顾客坚持购买转二线',notes:'',needReport:false},
+            {id:'no-barcode',title:'无条码商品',risk:'mid',tags:['商品','结算'],keywords:['没有条码','扫不出来','无码'],criteria:'商品无法扫码结算',flow:[{step:'引导顾客在购物车手动添加'},{step:'联系商家确认价格'},{step:'协助完成结算'}],scripts:[{label:'引导',text:'您好，该商品暂时无法扫码，请您在购物车中手动搜索添加，或联系我们协助处理。'}],transferCondition:'无法处理转二线',notes:'',needReport:false}
+          ]
+        },
+        {
+          id: 'dm-dispute',
+          name: '顾客纠纷处理',
+          icon: '⚖️',
+          desc: '投诉、纠纷、顾客不满的处理流程',
+          scenarios: [
+            {id:'customer-complaint',title:'顾客投诉服务',risk:'mid',tags:['投诉','服务'],keywords:['投诉','不满意','服务差','要投诉'],criteria:'顾客对服务不满意',flow:[{step:'耐心倾听顾客诉求'},{step:'表达歉意'},{step:'提出解决方案'},{step:'必要时上报班长'}],scripts:[{label:'受理',text:'非常抱歉给您带来不好的体验，请您告诉我具体情况，我们会尽力为您解决。'}],transferCondition:'无法解决上报班长',notes:'',needReport:false},
+            {id:'door-not-open',title:'门无法打开',risk:'high',tags:['设备','门禁'],keywords:['门打不开','出不去','进不来','门坏了'],criteria:'门禁系统异常无法开关门',flow:[{step:'核实支付状态'},{step:'远程尝试开门'},{step:'通知商家或维修'},{step:'安抚顾客等待'}],scripts:[{label:'安抚',text:'非常抱歉，门禁系统出现异常，我们正在紧急处理，请您稍等片刻，感谢您的耐心等待。'}],transferCondition:'立即转二线处理',notes:'',needReport:true},
+            {id:'price-dispute',title:'商品价格争议',risk:'mid',tags:['价格','纠纷'],keywords:['价格不对','标价','贵了','价格错误'],criteria:'顾客对商品价格有异议',flow:[{step:'核实商品实际价格'},{step:'联系商家确认'},{step:'按实际价格处理'}],scripts:[{label:'核实',text:'您好，我来帮您核实一下该商品的价格，请稍等。'}],transferCondition:'价格差异较大联系商家',notes:'',needReport:false}
+          ]
+        }
+      ]
+    },
+    {
+      id: 'scenarios',
+      name: '具体场景',
+      icon: '📋',
+      color: 'info',
+      desc: '280+真实场景库：偷盗、身份核实、设备、商品、顾客行为、安全风险',
+      categories: [
+        {
+          id: 'sc-theft',
+          name: '偷盗相关',
           icon: '🚨',
-          desc: '到店处置偷盗、安全事件上报',
+          desc: '现场盗抢、计价舞弊、风险预警',
           scenarios: [
-            {id:'sm-theft',title:'到店处置偷盗',risk:'high',tags:['偷盗','到店处置'],keywords:['偷盗','盗抢','夹带'],criteria:'AI值守转交偷盗事件需到店处理',flow:[{step:'接收AI值守转交信息'},{step:'到店核实情况'},{step:'与顾客沟通处理'},{step:'上报班长并记录'}],scripts:[],transferCondition:'无法处理立即上报班长',notes:'到店前先查看监控录像了解情况',needReport:true},
-            {id:'sm-safety',title:'安全事件处置',risk:'high',tags:['安全','紧急'],keywords:['着火','受伤','打架','紧急'],criteria:'店内发生安全事件',flow:[{step:'评估现场情况'},{step:'必要时拨打110/120'},{step:'上报班长'},{step:'保留现场证据'}],scripts:[],transferCondition:'立即上报班长',notes:'人身安全优先，不要单独处置危险情况',needReport:true}
+            {id:'sc-theft-direct',title:'非正常方式进店偷盗',risk:'high',tags:['偷盗'],keywords:['翻墙','破门','非正常进店'],criteria:'顾客通过非正常方式进店后偷盗',flow:[{step:'立即锁门'},{step:'复制店铺信息备注'},{step:'转交二线+上报班长'}],scripts:[],transferCondition:'立即转二线+上报班长',notes:'无进出记录需特别备注',needReport:true},
+            {id:'sc-theft-door2',title:'倚门偷盗',risk:'high',tags:['偷盗'],keywords:['门口偷','倚门'],criteria:'顾客在门口实施偷盗',flow:[{step:'不锁门避免冲突'},{step:'备注详情'},{step:'转交二线+上报班长'}],scripts:[],transferCondition:'立即转二线+上报班长',notes:'倚门偷盗不锁门',needReport:true},
+            {id:'sc-theft-goods',title:'顾客故意偷盗商品',risk:'high',tags:['偷盗'],keywords:['藏商品','夹带','偷拿'],criteria:'发现顾客藏匿商品',flow:[{step:'按L键锁门'},{step:'备注详情'},{step:'转交二线'}],scripts:[],transferCondition:'立即转二线',notes:'',needReport:true},
+            {id:'sc-underpay2',title:'故意少付漏付',risk:'high',tags:['资金风险'],keywords:['���付','漏付'],criteria:'顾客故意少付或漏付',flow:[{step:'按L键锁门'},{step:'转交二线处理'}],scripts:[],transferCondition:'立即转二线+锁门',notes:'',needReport:true},
+            {id:'sc-barcode-swap',title:'撕换条码差价',risk:'high',tags:['计价舞弊'],keywords:['换条码','撕标签','改价格'],criteria:'发现顾客撕掉或更换商品条码',flow:[{step:'立即介入制止'},{step:'要求按原价支付'},{step:'拒绝则锁门转二线'}],scripts:[{label:'制止',text:'您好，请按商品原价支付，谢谢配合。'}],transferCondition:'拒绝配合立即转二线',notes:'',needReport:true},
+            {id:'sc-theft-suspect',title:'疑似偷盗行为异常',risk:'mid',tags:['风险预警'],keywords:['行为异常','遮挡摄像头'],criteria:'顾客行为高度异常疑似偷盗',flow:[{step:'重点关注监控'},{step:'主动介入询问'},{step:'无法核实转二线'}],scripts:[{label:'询问',text:'您好，请问有什么需要帮助的吗？'}],transferCondition:'无法核实转二线',notes:'',needReport:false}
           ]
         },
         {
-          id: 'sm-reception',
-          name: '顾客接待',
-          icon: '💬',
-          desc: '日常服务、开门、问价、商品指引',
+          id: 'sc-identity',
+          name: '身份与核实',
+          icon: '🪪',
+          desc: '人员身份核实、骑手、店主家人、潜在风险人员',
           scenarios: [
-            {id:'ask-person',title:'顾客询问店里是否有人',risk:'low',tags:['被动服务','常规'],keywords:['有人吗','有没有人','在吗'],criteria:'顾客呼叫或发出询问',flow:[{step:'及时响应，3秒内回复'},{step:'使用标准话术回应'}],scripts:[{label:'标准话术',text:'请问有什么可以帮您？'}],transferCondition:'无需转人工',notes:'响应时间控制在3秒内',needReport:false},
-            {id:'ask-price',title:'顾客询问商品价格',risk:'low',tags:['被动服务','价格查询'],keywords:['多少钱','价格','价钱','怎么卖'],criteria:'顾客询问价格',flow:[{step:'引导顾客扫码查看价格'}],scripts:[{label:'标准话术',text:'请将商品条形码对准扫码盒扫描即可看到价格。'}],transferCondition:'无需转人工',notes:'',needReport:false},
-            {id:'ask-location',title:'顾客询问商品位置',risk:'low',tags:['被动服务','商品指引'],keywords:['在哪','在哪里','哪个区','找不到'],criteria:'顾客找不到商品',flow:[{step:'引导大致范围查找'},{step:'若未找到则致歉'},{step:'引导选购替代商品'}],scripts:[{label:'引导话术',text:'请您移步至XX用品区查看是否有您需要的商品。'},{label:'致歉话术',text:'实在抱歉，此类商品可能已经售空，您可以看一下店内是否有其他商品可以替代。'}],transferCondition:'药店询问商品位置需转交二线协助查询',notes:'',needReport:false},
-            {id:'open-door',title:'协助顾客开门离店',risk:'low',tags:['主动服务','开门'],keywords:['开门','出不去','门打不开','离店'],criteria:'顾客无法正常离店',flow:[{step:'确认顾客购物流程无异常'},{step:'按O键远程开门'},{step:'引导顾客离店'}],scripts:[{label:'开门话术',text:'门已经帮您打开了，请携带好您的随身物品离店，期待您的下次光临。'}],transferCondition:'无需转人工',notes:'严禁将店外人员放入',needReport:false}
+            {id:'sc-rider',title:'外卖骑手取货',risk:'low',tags:['骑手','核实'],keywords:['骑手','外卖','取货','美团'],criteria:'外卖骑手进店取货',flow:[{step:'核实订单信息'},{step:'引导正确取货'},{step:'确认核销后开门'}],scripts:[{label:'引导',text:'您好，请出示您的取货订单，核实后为您开门。'}],transferCondition:'订单异常转二线',notes:'',needReport:false},
+            {id:'sc-owner-family',title:'店主家人/朋友进店',risk:'mid',tags:['身份核实'],keywords:['老板家人','老板朋友','老板让我来'],criteria:'自称店主家人或朋友进店拿货',flow:[{step:'联系商家核实身份'},{step:'商家确认后方可放行'},{step:'未确认不得拿货'}],scripts:[{label:'核实',text:'您好，为保障商家财产安全，需要联系商家确认您的身份，请稍等。'}],transferCondition:'联系不上商家转二线',notes:'',needReport:false},
+            {id:'sc-worker',title:'业务员/送货员进店',risk:'low',tags:['身份核实'],keywords:['送货','补货','理货','业务员'],criteria:'业务人员进店补货或理货',flow:[{step:'询问来意'},{step:'全程关注监控'},{step:'特殊情况告知商家'}],scripts:[{label:'询问',text:'您好，请问您是来送货还是补货的？'}],transferCondition:'异常情况转二线',notes:'',needReport:false},
+            {id:'sc-already-instore',title:'分配时顾客已在店',risk:'mid',tags:['身份核实'],keywords:['已���在店里','顾客在里面'],criteria:'接手店铺时已有顾客在店内',flow:[{step:'主动介入询问顾客情况'},{step:'核实是否已完成支付'},{step:'未付款引导支付'}],scripts:[{label:'询问',text:'您好，请问您是否已完成支付？'}],transferCondition:'无法核实转二线',notes:'',needReport:false},
+            {id:'sc-risk-person',title:'重点关注人员进店',risk:'high',tags:['风险预警','身份核实'],keywords:['黑名单','重点关注'],criteria:'系统标记的重点关注人员进店',flow:[{step:'立即提高警惕'},{step:'全程密切监控'},{step:'异常立即转二线'}],scripts:[],transferCondition:'发现异常立即转二线',notes:'',needReport:true},
+            {id:'sc-no-record',title:'无进店记录要求拿货',risk:'high',tags:['风险预警'],keywords:['没有记录','没进店'],criteria:'无进店记录顾客要求拿货',flow:[{step:'拒绝直接放行'},{step:'联系商家核实'},{step:'无法核实转二线'}],scripts:[{label:'拒绝',text:'您好，系统显示无您的进店记录，需要联系商家核实才能放行，请稍等。'}],transferCondition:'无法核实转二线',notes:'',needReport:true}
           ]
         },
         {
-          id: 'sm-product',
-          name: '商品与支付',
-          icon: '📦',
-          desc: '条码问题、售后退款、支付异常',
+          id: 'sc-device',
+          name: '设备技术类',
+          icon: '⚙️',
+          desc: '工作台客服相关、店铺设备故障',
           scenarios: [
-            {id:'no-barcode-product',title:'商品无条形码',risk:'low',tags:['商品问题','无码'],keywords:['无码','没条码','散装'],criteria:'商品本身无条形码',flow:[{step:'引导更换其他有条码商品代替'},{step:'顾客不配合则转交二线'}],scripts:[{label:'话术',text:'这件商品还没有入库，暂时无法购买，麻烦您更换其他商品。'}],transferCondition:'顾客不配合则转二线',notes:'',needReport:false},
-            {id:'pos-breakdown',title:'POS机无法使用',risk:'mid',tags:['设备故障'],keywords:['pos机','不能用','黑屏'],criteria:'POS机故障',flow:[{step:'引导使用小程序付款'},{step:'引导重启POS机'}],scripts:[{label:'小程序',text:'您下拉微信聊天界面，打开【微店加加】小程序点击扫码购物即可。'}],transferCondition:'重启无效则上报班长',notes:'',needReport:false},
-            {id:'overpay',title:'多付/重复支付',risk:'mid',tags:['资金风险'],keywords:['多付','重复付','付了两次'],criteria:'支付金额超出应付',flow:[{step:'备注事件'},{step:'联系商家退款'}],scripts:[],transferCondition:'无法处理转二线',notes:'',needReport:false}
+            {id:'sc-door-stuck',title:'门无法正常开关',risk:'high',tags:['门禁','设备'],keywords:['门打不开','门卡住','门坏'],criteria:'门禁无法正常工作',flow:[{step:'核实支付状态'},{step:'远程尝试操控'},{step:'通知商家维修'}],scripts:[{label:'安抚',text:'非常抱歉，我们正在紧急处理门禁问题，请稍等。'}],transferCondition:'立即转二线',notes:'',needReport:true},
+            {id:'sc-camera-offline',title:'监控摄像头离线',risk:'high',tags:['设备','监控'],keywords:['摄像头','监控断了','看不见'],criteria:'店铺监控摄像头离线',flow:[{step:'备注摄像头离线情况'},{step:'通知商家检查设备'},{step:'上报班长'}],scripts:[],transferCondition:'上报班长+通知商家',notes:'',needReport:true},
+            {id:'sc-pos-issue',title:'POS收银机异常',risk:'mid',tags:['设备','支付'],keywords:['收银机','POS','付不了'],criteria:'POS收银机无法正常使用',flow:[{step:'引导使用其他支付方式'},{step:'备注故障情况'},{step:'通知商家'}],scripts:[{label:'引导',text:'非常抱歉，收银设备暂时异常，请您使用扫码支付，感谢理解。'}],transferCondition:'无法解决转二线',notes:'',needReport:true}
           ]
         },
         {
-          id: 'sm-open-close',
-          name: '开关店流程',
-          icon: '🔑',
-          desc: '开店前检查、关店操作规范',
+          id: 'sc-goods2',
+          name: '商品服务类',
+          icon: '🛒',
+          desc: '支付结算、售后退换、商品破坏、商家需求',
           scenarios: [
-            {id:'sm-open',title:'开店前检查流程',risk:'low',tags:['开店','检查'],keywords:['开店','开门','检查'],criteria:'每日开店前',flow:[{step:'检查店内设备是否正常（POS机、扫码盒、门禁）'},{step:'检查商品陈列是否整齐'},{step:'确认监控画面正常'},{step:'登录值班系统，更新在线状态'}],scripts:[],transferCondition:'设备异常立即上报',notes:'',needReport:false},
-            {id:'sm-close',title:'关店操作流程',risk:'low',tags:['关店','交接'],keywords:['关店','关门','下班'],criteria:'每日关店时',flow:[{step:'确认店内无顾客'},{step:'检查设备关闭状态'},{step:'锁门并确认门禁正常'},{step:'完成交接记录'}],scripts:[],transferCondition:'无需转人工',notes:'关店前务必确认店内无人',needReport:false}
+            {id:'sc-pay-method',title:'顾客询问如何支付',risk:'low',tags:['支付','引导'],keywords:['怎么付','如何支付'],criteria:'顾客不会使用支付系统',flow:[{step:'引导扫码支付'},{step:'确认支付成功'}],scripts:[{label:'引导',text:'您好，请扫描收银台上的二维码进行支付，支付成功后门会自动打开。'}],transferCondition:'无需转人工',notes:'',needReport:false},
+            {id:'sc-price-equal',title:'等价/差价置换商品',risk:'mid',tags:['商品','计价'],keywords:['等价换','差价换'],criteria:'顾客要求等价置换商品',flow:[{step:'核实商家是否允许等价置换'},{step:'按商家要求处理'}],scripts:[],transferCondition:'商家明确禁止则拒绝',notes:'',needReport:false},
+            {id:'sc-return',title:'顾客要求退换货',risk:'mid',tags:['售后','退换'],keywords:['退货','换货','不要了'],criteria:'顾客购买后要求退换商品',flow:[{step:'了解退换原因'},{step:'核实购买记录'},{step:'联系商家处理'}],scripts:[{label:'受理',text:'您好，请问您需要退换的原因是什么？我们会帮您联系商家处理。'}],transferCondition:'商家拒绝则上报班长',notes:'',needReport:false},
+            {id:'sc-frozen-goods',title:'冷冻商品未放回冰柜',risk:'mid',tags:['商品管理'],keywords:['冰淇淋','冷冻','没放回去'],criteria:'顾客将冷冻商品拿出后未放回',flow:[{step:'及时提醒顾客放回'}],scripts:[{label:'提醒',text:'您好，如果不购买该冷冻商品，请放回冰柜，避免商品变质，谢谢配合。'}],transferCondition:'无需转人工',notes:'',needReport:false},
+            {id:'sc-unsealed',title:'拆封商品后放回',risk:'mid',tags:['商品管理'],keywords:['拆开了','撕开包装','开封'],criteria:'顾客拆封商品后放回货架',flow:[{step:'立即介入提醒'},{step:'引导购买或赔偿'}],scripts:[{label:'提醒',text:'您好，该商品已被拆封，无法二次销售，请您购买或按价赔偿。'}],transferCondition:'拒绝配合转二线',notes:'',needReport:false},
+            {id:'sc-wrong-goods',title:'骑手拿错货',risk:'mid',tags:['骑手','商品'],keywords:['拿错了','货不对','取错'],criteria:'外卖骑手取错商品',flow:[{step:'核实订单与商品'},{step:'引导放回并取正确商品'}],scripts:[{label:'核实',text:'您好，请核对一下您的订单，确认商品是否正确。'}],transferCondition:'无法处理联系商家',notes:'',needReport:false},
+            {id:'sc-merchant-need',title:'商家特殊需求',risk:'mid',tags:['商家','特殊需求'],keywords:['商家要求','特殊要求','老板说'],criteria:'商家有特���的运营需求',flow:[{step:'了解商家具体需求'},{step:'记录在重点关注'},{step:'按需求执行'}],scripts:[],transferCondition:'需求超出权限上报班长',notes:'',needReport:false},
+            {id:'sc-damage-intent',title:'故意损坏商品',risk:'high',tags:['破坏','赔偿'],keywords:['故意摔','砸商品','故意破坏'],criteria:'顾客故意损坏商品',flow:[{step:'立即制止'},{step:'要求赔偿'},{step:'拒绝赔偿锁门转二线'}],scripts:[{label:'要求赔偿',text:'您好，您损坏了店内商品，需要按价赔偿，请您配合。'}],transferCondition:'拒绝赔偿立即转二线',notes:'',needReport:true},
+            {id:'sc-damage-accident',title:'意外损坏商品',risk:'mid',tags:['破坏','意外'],keywords:['不小心','意外','碰倒'],criteria:'顾客意外损坏商品',flow:[{step:'安抚顾客'},{step:'联系商家确认处理方式'}],scripts:[{label:'安抚',text:'没关系，我们来联系商家确认处理方式。'}],transferCondition:'按商家要求处理',notes:'',needReport:false},
+            {id:'sc-photo',title:'顾客进店拍摄',risk:'low',tags:['行为'],keywords:['拍照','录像','拍摄'],criteria:'顾客在店内拍摄',flow:[{step:'询问目的'},{step:'商家介意则礼貌制止'}],scripts:[{label:'制止',text:'您好，本店不允许拍摄，请您配合，谢谢。'}],transferCondition:'拒不配合转二线',notes:'',needReport:false}
           ]
         },
         {
-          id: 'sm-scripts',
-          name: '话术参考',
-          icon: '💬',
-          desc: '值班店长常用标准话术',
+          id: 'sc-customer-behavior',
+          name: '顾客行为类',
+          icon: '👥',
+          desc: '非常规行为、不当行为、常规服务',
           scenarios: [
-            {id:'guidance-payment',title:'支付引导话术',risk:'low',tags:['话术','支付'],keywords:['支付','付款','扫码'],criteria:'顾客询问支付',flow:[{step:'说明支付流程'}],scripts:[{label:'完整引导',text:'请您移步至收银台，将商品条形码对准扫码盒加购，加购完商品后，出示付款码对准扫码盒支付即可。'},{label:'简化引导',text:'请到收银台扫码加购后，出示付款码支付。'}],transferCondition:'无需转人工',notes:'',needReport:false}
+            {id:'sc-beh-smoke',title:'店内吸烟',risk:'mid',tags:['不当行为'],keywords:['吸烟','抽烟'],criteria:'顾客在店内吸烟',flow:[{step:'立即介入制止'}],scripts:[{label:'制止',text:'本店禁止吸烟，请您将香烟熄灭至店外，感谢您的配合。'}],transferCondition:'拒不配合转二线',notes:'',needReport:false},
+            {id:'sc-beh-longstay',title:'长时间滞留',risk:'low',tags:['滞留'],keywords:['一直在','不走','滞留'],criteria:'顾客长时间滞留不购物',flow:[{step:'主动询问需求'},{step:'根据情况处理'}],scripts:[{label:'询问',text:'请问有什么可以帮到您的？'}],transferCondition:'有特殊需求转二线',notes:'',needReport:false},
+            {id:'sc-beh-fight',title:'顾客打架斗殴',risk:'high',tags:['安全','冲突'],keywords:['打架','斗殴','冲突'],criteria:'顾客发生肢体冲突',flow:[{step:'立即介入劝阻'},{step:'转二线+上报班长'}],scripts:[{label:'劝阻',text:'请停止冲突，保持秩序。'}],transferCondition:'立即转二线+上报班长',notes:'',needReport:true},
+            {id:'sc-beh-child',title:'携带儿童/宠物进店',risk:'low',tags:['主动服务'],keywords:['小孩','宠物','狗','猫'],criteria:'携带儿童或宠物进店',flow:[{step:'提醒看顾儿童'},{step:'宠物引导至店外'}],scripts:[{label:'儿童',text:'请看顾好您的小朋友，避免受伤。'},{label:'宠物',text:'本店禁止宠物入内，请将宠物带至店外。'}],transferCondition:'无需转人工',notes:'',needReport:false},
+            {id:'sc-beh-drunk',title:'醉酒顾客闹事',risk:'high',tags:['安全','特殊人群'],keywords:['醉酒','喝醉','闹事'],criteria:'醉酒顾客在店内滋事',flow:[{step:'备注情况'},{step:'立即转二线'}],scripts:[],transferCondition:'立即转二线',notes:'',needReport:false},
+            {id:'sc-beh-homeless',title:'流浪人员进店',risk:'mid',tags:['特殊人群'],keywords:['流浪','乞讨'],criteria:'流浪人员进店',flow:[{step:'礼貌询问是否购物'},{step:'非购物引导离店'}],scripts:[{label:'引导',text:'您好，请问您是来购物的吗？'}],transferCondition:'拒绝离店转二线',notes:'',needReport:false}
+          ]
+        },
+        {
+          id: 'sc-safety2',
+          name: '安全风险类',
+          icon: '🛡️',
+          desc: '财产安全、人身安全、紧急情况处置',
+          scenarios: [
+            {id:'sc-fire',title:'店内发生火情',risk:'high',tags:['紧急','消防'],keywords:['着火','冒烟','火灾'],criteria:'店内出现火情',flow:[{step:'立即开门疏散'},{step:'通知商家'},{step:'上报班长'},{step:'拨打119'}],scripts:[],transferCondition:'立即转二线+上报班长',notes:'生命安全优先立即开门',needReport:true},
+            {id:'sc-medical',title:'顾客突发疾病',risk:'high',tags:['紧急','急救'],keywords:['晕倒','突发','急救','不舒服'],criteria:'顾客突发疾病',flow:[{step:'立即开门'},{step:'建议拨打120'},{step:'上报班长'}],scripts:[{label:'询问',text:'您好，需要帮您联系急救吗？'}],transferCondition:'立即转二线+上报班长',notes:'生命安全优先',needReport:true},
+            {id:'sc-property',title:'财产安全威胁',risk:'high',tags:['财产安全'],keywords:['可疑','威胁','危险'],criteria:'发现财产安全威胁',flow:[{step:'密切监控'},{step:'主动介入'},{step:'无法处理转二线'}],scripts:[],transferCondition:'无法处理立即转二线',notes:'',needReport:true}
           ]
         }
       ]
     },
     {
-      id: 'system-devices',
+      id: 'system-device',
       name: '系统与设备',
-      icon: '🛠️',
-      color: 'default',
-      desc: '后台系统操作、设备故障处理、自身设备问题',
+      icon: '🖥️',
+      color: 'secondary',
+      desc: '工作台操作、后台管理、设备维护、在线服务操作',
       categories: [
         {
-          id: 'sys-ai',
-          name: 'AI值守后台及工作台',
-          icon: '🤖',
-          desc: 'AI值守系统登录、操作、常见问题',
-          scenarios: [
-            {id:'ai-system-assign',title:'系统分配-AI识别无异常',risk:'low',tags:['AI操作','系统分配'],keywords:['系统分配','无异常','自动分配'],criteria:'AI agent初判无异常，系统分配给客服',flow:[{step:'接收系统分配店铺'},{step:'查看AI识别结果'},{step:'无异常则按常规流程值守'},{step:'发现异常则及时介入或转二线'}],scripts:[],transferCondition:'发现异常立即处理',notes:'AI识别结果为异常时工作台即时标红预警，需优先介入',needReport:false},
-            {id:'pos-operation',title:'AI工作台操作指南',risk:'low',tags:['工具','工作台'],keywords:['工作台','操作','登录'],criteria:'工作台使用',flow:[{step:'登录AI值守工作台账号'},{step:'按F键唤起控制台'},{step:'查看店铺分配列表'},{step:'处理异常标红店铺'}],scripts:[],transferCondition:'无需转人工',notes:'',needReport:false}
-          ]
-        },
-        {
-          id: 'sys-manager',
-          name: '值班店长工作台/后台',
-          icon: '🏪',
-          desc: '值班店长系统操作、后台管理',
-          scenarios: [
-            {id:'monitor-system',title:'监控系统使用',risk:'low',tags:['工具','监控'],keywords:['监控','摄像头','画面'],criteria:'查看监控',flow:[{step:'登录监控系统'},{step:'切换摄像头视角'},{step:'回放录像'}],scripts:[],transferCondition:'无需转人工',notes:'',needReport:false},
-            {id:'service-standards',title:'值班店长后台操作',risk:'low',tags:['规范','后台'],keywords:['后台','系统','操作'],criteria:'后台日常操作',flow:[{step:'登录值班店长后台'},{step:'查看当前值守店铺列表'},{step:'处理待办事项'},{step:'记录交接信息'}],scripts:[],transferCondition:'无需转人工',notes:'',needReport:false}
-          ]
-        },
-        {
-          id: 'sys-store-device',
-          name: '店铺设备故障',
-          icon: '🔧',
-          desc: 'POS机、扫码盒、门禁等店铺设备问题',
-          scenarios: [
-            {id:'door-not-open',title:'门无法打开/系统故障',risk:'mid',tags:['设备故障'],keywords:['门打不开','系统故障','卡住了'],criteria:'门禁系统故障',flow:[{step:'尝试按O键开门'},{step:'无效则转二线+上报班长'}],scripts:[],transferCondition:'无效立即转二线',notes:'',needReport:false},
-            {id:'fridge-open',title:'冰箱门未关',risk:'low',tags:['主动服务','设备'],keywords:['冰箱','冰柜','门没关','开着'],criteria:'监控发现冰箱门未关',flow:[{step:'店内有顾客：提醒顾客关好冰箱门'},{step:'店内无顾客：转交二线处理'}],scripts:[{label:'提醒话术',text:'辛苦您将店内的冰箱门关好，感谢您的配合。'}],transferCondition:'无顾客时转二线',notes:'',needReport:false}
-          ]
-        },
-        {
-          id: 'sys-own-device',
-          name: '自身设备问题',
+          id: 'sys-workstation',
+          name: '工作台操作',
           icon: '💻',
-          desc: '值守人员自己的电脑、网络、登录异常',
+          desc: '值守工作台的日常操作规范',
           scenarios: [
-            {id:'own-pc-issue',title:'电脑故障处理',risk:'mid',tags:['自身设备','电脑'],keywords:['电脑','死机','蓝屏','重启'],criteria:'值守电脑出现故障',flow:[{step:'尝试重启电脑'},{step:'重启后重新登录所有系统'},{step:'检查是否有遗漏的店铺未处理'},{step:'上报班长说明中断时间'}],scripts:[],transferCondition:'无法恢复立即上报班长',notes:'重启后务必检查是否有未处理的异常店铺',needReport:true},
-            {id:'own-network-issue',title:'网络异常处理',risk:'mid',tags:['自身设备','网络'],keywords:['断网','网络','连不上','掉线'],criteria:'网络连接异常',flow:[{step:'检查网线/WiFi连接'},{step:'重启路由器'},{step:'使用手机热点临时替代'},{step:'上报班长'}],scripts:[],transferCondition:'无法恢复立即上报班长',notes:'',needReport:true},
-            {id:'own-shortcut',title:'常用快捷键/操作技巧',risk:'low',tags:['技巧','快捷键'],keywords:['快捷键','操作','技巧'],criteria:'日常操作提效',flow:[{step:'O键：远程开门'},{step:'L键：远程锁门'},{step:'F键：唤起AI工作台控制台'},{step:'复制店铺信息：右键店铺名称'}],scripts:[],transferCondition:'无需转人工',notes:'',needReport:false}
+            {id:'sys-lock-door',title:'远程锁门操作',risk:'low',tags:['工作台','门禁'],keywords:['锁门','L键','远程锁'],criteria:'需要远程锁定门禁',flow:[{step:'按L键触发锁门'},{step:'确认门禁状态'},{step:'备注锁门原因'}],scripts:[],transferCondition:'锁门失败立即转二线',notes:'锁门快捷键为L键',needReport:false},
+            {id:'sys-open-door',title:'远程开门操作',risk:'low',tags:['工作台','门禁'],keywords:['开门','远程开','手动开门'],criteria:'需要远程开启门禁',flow:[{step:'核实顾客身份和支付状态'},{step:'操作工作台开门'},{step:'确认门已打开'}],scripts:[],transferCondition:'开门失败通知商家',notes:'开门前务必核实支付',needReport:false},
+            {id:'sys-copy-info',title:'复制店铺信息',risk:'low',tags:['工作台','操作'],keywords:['复制店铺','店铺信息'],criteria:'需要复制店铺信息进行备注',flow:[{step:'找到店铺信息模块'},{step:'点击复制按钮'},{step:'粘贴到备注栏'}],scripts:[],transferCondition:'',notes:'转交二线前必须复制店铺信息',needReport:false},
+            {id:'sys-transfer',title:'转交二线操作',risk:'low',tags:['工作台','转交'],keywords:['转交','转人工'],criteria:'需要将工单转交二线���服',flow:[{step:'确认需转交的原因'},{step:'复制店铺信息'},{step:'填写备注内容'},{step:'点击转交按钮'}],scripts:[],transferCondition:'',notes:'备注要详细，转交后跟进结果',needReport:false}
+          ]
+        },
+        {
+          id: 'sys-backend',
+          name: '后台管理',
+          icon: '⚙️',
+          desc: '后台系统的管理操作',
+          scenarios: [
+            {id:'sys-blacklist',title:'黑名单管理',risk:'low',tags:['后台','管理'],keywords:['黑名单','拉黑','屏蔽'],criteria:'需要将顾客加入黑名单',flow:[{step:'进入后台管理页面'},{step:'找到黑名单功能'},{step:'添加顾客信息'},{step:'保存设置'}],scripts:[],transferCondition:'操作失败联系技术支持',notes:'',needReport:false},
+            {id:'sys-key-note',title:'重点关注设置',risk:'low',tags:['后台','管理'],keywords:['重点关注','备注重点'],criteria:'需要标记重点关注事项',flow:[{step:'进入店铺重点关注'},{step:'添加注意事项'},{step:'确认保存'}],scripts:[],transferCondition:'',notes:'',needReport:false}
+          ]
+        },
+        {
+          id: 'sys-online',
+          name: '在线服务操作',
+          icon: '🌐',
+          desc: '在线客服、远程协助的操作规范',
+          scenarios: [
+            {id:'sys-chat',title:'在线对���服务',risk:'low',tags:['在线服务'],keywords:['在线','聊天','文字服务'],criteria:'通过文字与顾客沟通',flow:[{step:'主动问候'},{step:'了解顾客需求'},{step:'提供解决方案'},{step:'确认问题解决'}],scripts:[{label:'问候',text:'您好，欢迎光临，请问有什么可以帮到您的？'}],transferCondition:'无法解决则转二线',notes:'',needReport:false},
+            {id:'sys-alarm',title:'警报响应处理',risk:'mid',tags:['警报','响应'],keywords:['警报','报警','报警声'],criteria:'系统触发警报',flow:[{step:'立即查看监控画面'},{step:'核实警报原因'},{step:'根据情况处理'},{step:'记录警报处理结果'}],scripts:[],transferCondition:'高风险警报立即转二线',notes:'',needReport:false}
           ]
         }
       ]
     },
     {
-      id: 'training-standards',
-      name: '培训与规范',
+      id: 'tools-norms',
+      name: '工具与规范',
       icon: '📚',
       color: 'success',
-      desc: '新人培训、话术库、案例复盘、考核标准',
+      desc: '培训资料、操作规范、话术模板、服务标准',
       categories: [
         {
-          id: 'tr-onboarding',
-          name: '新人培训须知',
-          icon: '🎓',
-          desc: '新员工入职培训内容与注意事项',
-          scenarios: [
-            {id:'onboarding-guide',title:'新人入职指南',risk:'low',tags:['培训','入职'],keywords:['新人','入职','培训'],criteria:'新员工入职',flow:[{step:'了解公司文化与岗位职责'},{step:'学习基础操作流程'},{step:'熟悉工作台与系统'},{step:'实操练习与考核'}],scripts:[],transferCondition:'无需转人工',notes:'',needReport:false},
-            {id:'basic-skills',title:'基础技能培训',risk:'low',tags:['培训','技能'],keywords:['技能','学习','培训'],criteria:'技能培训',flow:[{step:'学习理论知识'},{step:'观看操作演示'},{step:'实际操作练习'},{step:'考核评估'}],scripts:[],transferCondition:'无需转人工',notes:'',needReport:false}
-          ]
-        },
-        {
-          id: 'tr-scripts',
-          name: '标准话术库',
+          id: 'tn-scripts',
+          name: '标准话术',
           icon: '💬',
-          desc: '各类场景通用标准话术',
+          desc: '各场景标准话术模板',
           scenarios: [
-            {id:'greeting-basic-tr',title:'基础问候话术',risk:'low',tags:['话术','问候'],keywords:['你好','欢迎','问候'],criteria:'顾客进店',flow:[{step:'及时问候'},{step:'询问需求'}],scripts:[{label:'标准问候',text:'您好，欢迎光临，请问有什么可以帮您？'},{label:'简洁问候',text:'您好，有什么可以帮您？'}],transferCondition:'无需转人工',notes:'',needReport:false},
-            {id:'apology-basic-tr',title:'基础致歉话术',risk:'low',tags:['话术','致歉'],keywords:['抱歉','对不起','不好意思'],criteria:'需要致歉',flow:[{step:'诚恳致歉'},{step:'说明原因'},{step:'提供解决方案'}],scripts:[{label:'标准致歉',text:'实在抱歉给您带来不便，我们会尽快处理。'},{label:'深度致歉',text:'非常抱歉，这是我们的疏忽，我们会立即为您解决。'}],transferCondition:'顾客不满意转二线',notes:'',needReport:false},
-            {id:'complaint-handling-tr',title:'投诉处理话术',risk:'mid',tags:['话术','投诉'],keywords:['投诉','不满','差评'],criteria:'顾客投诉',flow:[{step:'耐心倾听'},{step:'表示理解'},{step:'致歉并说明处理方案'}],scripts:[{label:'安抚话术',text:'非常理解您的心情，给您带来不好的体验我们深表歉意，我们会认真处理您的问题。'}],transferCondition:'严重投诉立即上报',notes:'',needReport:true}
+            {id:'tn-greeting',title:'开场问候话术',risk:'low',tags:['话术','服务'],keywords:['问候','欢迎','你好'],criteria:'顾客进店或联系时的标准问候',flow:[{step:'主动问候顾客'},{step:'询问需求'}],scripts:[{label:'标准问候',text:'您好，欢迎光临，请问有什么可以帮到您的？'},{label:'顾客进店',text:'您好，请问您需要帮助吗？'}],transferCondition:'',notes:'',needReport:false},
+            {id:'tn-apology',title:'致歉话术',risk:'low',tags:['话术','致歉'],keywords:['道歉','抱歉','不好意思'],criteria:'需要向顾客致歉时',flow:[{step:'表达歉意'},{step:'解释情况'},{step:'提出解决方案'}],scripts:[{label:'标准致歉',text:'非常抱歉给您带来不好的体验，我们会尽快解决，感谢您的理解。'},{label:'设备故障致歉',text:'非常抱歉，设备出现临时故障，我们正在紧急处理，感谢您的耐心等待。'}],transferCondition:'',notes:'',needReport:false},
+            {id:'tn-refusal',title:'拒绝服务话术',risk:'low',tags:['话术','拒绝'],keywords:['拒绝','不能','不允许'],criteria:'需要礼貌拒绝顾客不合理请求',flow:[{step:'礼貌说明原因'},{step:'提供替代方案（如有）'}],scripts:[{label:'拒绝未成年购烟酒',text:'您好，根据相关规定，购买烟酒需要年满18周岁并出示有效身份证，请您配合。'},{label:'拒绝不合规请求',text:'非常抱歉，您的请求不符合相关规定，我们无法为您提供该服务。'}],transferCondition:'',notes:'',needReport:false}
           ]
         },
         {
-          id: 'tr-cases',
-          name: '典型案例复盘',
-          icon: '📊',
-          desc: '偷盗、投诉、优秀服务案例分析',
+          id: 'tn-standards',
+          name: '服务规范',
+          icon: '📋',
+          desc: '服务标准、行为准则、考核要求',
           scenarios: [
-            {id:'case-theft',title:'偷盗案例分析',risk:'high',tags:['案例','偷盗'],keywords:['偷盗','案例','分析'],criteria:'偷盗事件复盘',flow:[{step:'回顾事件经过'},{step:'分析处理过程'},{step:'总结经验教训'},{step:'提出改进措施'}],scripts:[],transferCondition:'无需转人工',notes:'',needReport:false},
-            {id:'case-complaint',title:'投诉处理案例',risk:'mid',tags:['案例','投诉'],keywords:['投诉','案例','处理'],criteria:'投诉事件复盘',flow:[{step:'回顾投诉内容'},{step:'分析处理方式'},{step:'总结沟通技巧'},{step:'优化服务流程'}],scripts:[],transferCondition:'无需转人工',notes:'',needReport:false},
-            {id:'excellent-service',title:'优质服务案例',risk:'low',tags:['案例','优秀'],keywords:['优秀','服务','案例'],criteria:'优秀服务复盘',flow:[{step:'分享服务过程'},{step:'总结��功要点'},{step:'推广优秀经验'}],scripts:[],transferCondition:'无需转人工',notes:'',needReport:false}
+            {id:'tn-response-time',title:'响应时效规范',risk:'low',tags:['规范','时效'],keywords:['响应时间','处理时效'],criteria:'客服响应时效标准',flow:[{step:'收到信息立即回复'},{step:'30秒内响应顾客'},{step:'复杂问题告知处理时效'}],scripts:[],transferCondition:'',notes:'响应时效是考核重点指标',needReport:false},
+            {id:'tn-handover',title:'交接班规范',risk:'low',tags:['规范','交接'],keywords:['交接班','交班','接班'],criteria:'班次交接的标准流程',flow:[{step:'整理当前未完成工单'},{step:'检查门禁状态'},{step:'向接班人传达重点事项'},{step:'完成交接记录'}],scripts:[],transferCondition:'',notes:'交接班必须确保无遗漏工单',needReport:false}
           ]
-        },
+        }
+      ]
+    },
+    {
+      id: 'special-zone',
+      name: '专项分区',
+      icon: '⭐',
+      color: 'danger',
+      desc: '各品牌/业态专项操作规范：周黑鸭、红旗等',
+      categories: [
         {
-          id: 'tr-standards',
-          name: '操作规范',
-          icon: '📐',
-          desc: '值守操作标准与注意事项',
+          id: 'sp-zhouniya',
+          name: '周黑鸭专项',
+          icon: '🦆',
+          desc: '周黑鸭门店专用操作规范与场景处理',
           scenarios: [
-            {id:'security-standards',title:'安全操作规范',risk:'mid',tags:['规范','安全'],keywords:['安全','规范','注意'],criteria:'涉及安全操作',flow:[{step:'评估风险等级'},{step:'按规范操作'},{step:'必要时上报'}],scripts:[],transferCondition:'高风险立即上报',notes:'',needReport:false},
-            {id:'communication-skills',title:'沟通技巧提升',risk:'low',tags:['学习','沟通'],keywords:['沟通','技巧','提升'],criteria:'沟通能力提升',flow:[{step:'学习沟通理论'},{step:'分析案例'},{step:'模拟练习'},{step:'实战应用'}],scripts:[],transferCondition:'无需转人工',notes:'',needReport:false}
-          ]
-        },
-        {
-          id: 'tr-exam',
-          name: '考核标准',
-          icon: '✅',
-          desc: '新人考核要求与通过标准',
-          scenarios: [
-            {id:'exam-standard',title:'新人考核标准',risk:'low',tags:['考核','标准'],keywords:['考核','通过','标准','测试'],criteria:'新人考核',flow:[{step:'理论知识测试'},{step:'实操演练考核'},{step:'话术模拟考核'},{step:'综合评分'}],scripts:[],transferCondition:'无需转人工',notes:'',needReport:false}
-          ]
-        },
-        {
-          id: 'tr-escalation',
-          name: '紧急联系/上报流程',
-          icon: '📞',
-          desc: '遇到大事找谁、上报流程规范',
-          scenarios: [
-            {id:'escalation-flow',title:'紧急上报流程',risk:'high',tags:['上报','紧急'],keywords:['上报','班长','紧急','联系'],criteria:'遇到需要上报的情况',flow:[{step:'判断事件等级'},{step:'第一时间联系班长'},{step:'提供：店铺ID+事件描述+时间+顾客信息'},{step:'等待班长指示并配合处理'}],scripts:[{label:'上报格式',text:'店铺ID：XXX | 事件：XXX | 时间：XX:XX | 情况说明：XXX'}],transferCondition:'无需转人工',notes:'偷盗/少付/人身安全/舆情必须上报',needReport:true}
+            {id:'sp-zhy-order',title:'周黑鸭订单处理',risk:'low',tags:['周黑鸭','订单'],keywords:['周黑鸭','订单','取货'],criteria:'周黑鸭相关订单处理',flow:[{step:'核实周黑鸭订单信息'},{step:'引导顾客正确取货'},{step:'确认订单核销'}],scripts:[{label:'引导',text:'您好，请出示您的周黑鸭订单二维码，我为您核实后取货。'}],transferCondition:'订单异常联系商家',notes:'',needReport:false},
+            {id:'sp-zhy-product',title:'周黑鸭商品称重',risk:'low',tags:['周黑鸭','商品'],keywords:['称重','按克','散称'],criteria:'周黑鸭散装商品需要称重结算',flow:[{step:'引导顾客到称重区'},{step:'按重量计算价格'},{step:'协助完成支付'}],scripts:[],transferCondition:'无法处理联系商家',notes:'',needReport:false},
+            {id:'sp-zhy-complaint',title:'周黑鸭品质投诉',risk:'mid',tags:['周黑鸭','投诉'],keywords:['周黑鸭','不新鲜','变质','质量'],criteria:'顾客投诉周黑鸭商品品质问题',flow:[{step:'安抚顾客'},{step:'记录投诉详情'},{step:'联系周黑鸭商家处理'}],scripts:[{label:'安抚',text:'非常抱歉，我们会立即联系周黑鸭商家为您处理，请您稍等。'}],transferCondition:'商家不配合上报班长',notes:'',needReport:false}
           ]
         }
       ]
     }
   ]
-};
-
-const ADMIN_CONFIG = {
-  passwordHash: 'd2VpZGlhbjI0YWRtaW4='
 };

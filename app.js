@@ -74,17 +74,20 @@ function getFilteredCategories() {
 // ── Nav Tree ──────────────────────────────────────────────
 function renderNav(filter) {
   const cats = getFilteredCategories();
+  const seen = JSON.parse(localStorage.getItem('kb_updates_seen') || '{}');
   const tree = document.getElementById('nav-tree');
   tree.innerHTML = cats.map(cat => {
     const scenarios = filter
       ? cat.scenarios.filter(s => matchSearch(s, filter))
       : cat.scenarios;
     if (filter && !scenarios.length) return '';
+    const hasUpdate = !seen[cat.id];
     return `<div class="nav-l1 ${state.currentCategory===cat.id?'open':''}" id="nav-${cat.id}">
       <div class="nav-l1-label" onclick="toggleNav('${cat.id}')">
         <span class="arrow">▶</span>
         <span class="nav-l1-icon">${cat.icon}</span>
         <span>${cat.name}</span>
+        ${hasUpdate?'<span class="update-badge">有更新</span>':''}
       </div>
       <div class="nav-l2-list">
         ${scenarios.map(s => `<div class="nav-l2 ${state.currentScenario===s.id?'active':''}" onclick="showScenario('${cat.id}','${s.id}')">${s.title}</div>`).join('')}
@@ -222,6 +225,10 @@ function showCategory(catId) {
 function showScenario(catId, scenarioId) {
   state.currentCategory = catId;
   state.currentScenario = scenarioId;
+  // 标记该目录更新为已读
+  const seen = JSON.parse(localStorage.getItem('kb_updates_seen') || '{}');
+  seen[catId] = Date.now();
+  localStorage.setItem('kb_updates_seen', JSON.stringify(seen));
   document.getElementById('search-results').className = '';
   document.getElementById('category-view').style.display = 'none';
   const data = getData();
@@ -452,6 +459,14 @@ function saveScenario() {
   });
   s.notes = document.getElementById('edit-notes').value.trim();
   saveData(data);
+  // 记录更新通知
+  const updates = JSON.parse(localStorage.getItem('kb_updates') || '[]');
+  updates.unshift({catId, scenarioId, title: s.title, time: Date.now()});
+  localStorage.setItem('kb_updates', JSON.stringify(updates.slice(0, 50)));
+  // 标记该目录有未读更新
+  const seen = JSON.parse(localStorage.getItem('kb_updates_seen') || '{}');
+  delete seen[catId];
+  localStorage.setItem('kb_updates_seen', JSON.stringify(seen));
   closeAdminPanel();
   showScenario(catId, scenarioId);
 }
