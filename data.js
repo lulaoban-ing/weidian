@@ -15,41 +15,76 @@ const KB_DATA = {
       desc: 'AI 值守岗位专用：远程监控、实时响应、异常处理',
       categories: [
         {
-          id: 'ai-risk',
-          name: '异常与风险',
-          icon: '🚨',
-          desc: '偷盗识别、风险预警、身份核实',
+          id: 'ai-preparation',
+          name: '工作准备',
+          icon: '⚙️',
+          desc: '上线前设备检查、软件登录、语音包录制、下班操作',
           scenarios: [
-            {id:'theft-instore',title:'店内小型偷盗',risk:'high',tags:['偷盗','资金安全'],keywords:['偷','盗','藏商品','夹带'],criteria:'发现偷盗行为',flow:[{role:'客服',step:'按L键强制锁门'},{role:'客服',step:'复制店铺信息'},{role:'客服',step:'备注详情'},{role:'客服',step:'转交二线'},{role:'值班店长',step:'上报班长'}],scripts:[],transferCondition:'立即转二线+上报班长',notes:'高风险必须上报班长',needReport:true},
-            {id:'theft-door',title:'倚门盗抢',risk:'high',tags:['盗抢','人身安全'],keywords:['抢','门口','盗抢','强抢'],criteria:'门口发生盗抢',flow:[{role:'客服',step:'复制店铺信息'},{role:'客服',step:'备注详情'},{role:'客服',step:'转交二线'},{role:'值班店长',step:'上报班长'}],scripts:[],transferCondition:'立即转二线+上报班长',notes:'倚门盗抢不锁门，避免冲突',needReport:true},
-            {id:'underpay',title:'少付/漏付',risk:'high',tags:['资金风险'],keywords:['少付','漏付','没付全'],criteria:'实际支付少于应付',flow:[{step:'按L键锁门'},{step:'转交二线处理'}],scripts:[],transferCondition:'立即转二线+锁门',notes:'高风险必须锁门',needReport:true},
-            {id:'merchant-code',title:'扫描商家收款码',risk:'mid',tags:['私码'],keywords:['商家码','老板码','私人码'],criteria:'顾客扫了商家私人码',flow:[{step:'引导在POS机重新支付'},{step:'顾客拒绝则上报班长'}],scripts:[{label:'引导',text:'辛苦您在POS机上重新支付，不然门无法打开，多付款项我们会联系商家退还。'}],transferCondition:'顾客拒绝则上报',notes:'',needReport:true},
-            {id:'minor-cigarette',title:'未成年购买香烟',risk:'high',tags:['特殊人群','合规'],keywords:['未成年','学生','买烟'],criteria:'疑似未成年购烟',flow:[{step:'主动介入询问年龄'},{step:'要求出示身份证'},{step:'未满18岁拒绝售卖'}],scripts:[{label:'询问',text:'您好，购买香烟需要年满18周岁，请问您满18岁了吗？请出示您的身份证。'}],transferCondition:'顾客拒不配合转二线',notes:'',identifyTips:['穿校服','背书包','身高矮小','面部稚嫩'],needReport:false},
-            {id:'uniform-person',title:'制服人员进店',risk:'high',tags:['特殊人群','执法'],keywords:['制服','执法','检查','工商'],criteria:'制服人员进店',flow:[{step:'主动询问来意'},{step:'公务检查立即转二线+备注'}],scripts:[{label:'询问',text:'请问您是来购物还是有其他事项？'}],transferCondition:'公务检查立即转二线',notes:'',needReport:false},
-            {id:'drunk-customer',title:'顾客醉酒闹事',risk:'high',tags:['特殊人群','安全'],keywords:['醉酒','喝醉','闹事'],criteria:'顾客醉酒',flow:[{step:'备注情况'},{step:'转接二线'}],scripts:[],transferCondition:'立即转二线',notes:'',needReport:false},
-            {id:'food-expired',title:'商品过期/变质投诉',risk:'high',tags:['食品安全'],keywords:['过期','变质','发霉'],criteria:'顾客投诉食品问题',flow:[{step:'优先安抚'},{step:'引导将商品放显眼位置'},{step:'上报班长联系商家'}],scripts:[{label:'安抚',text:'实在抱歉，辛苦您将商品放在收银台上，我们马上通知商家处理。'}],transferCondition:'上报班长',notes:'',needReport:true}
+            {id:'prep-device',title:'上线前设备检查',risk:'low',tags:['设备','准备'],keywords:['设备','检查','鼠标','耳机','键盘','摄像头'],criteria:'每次上线前必须检查',flow:[{step:'检查鼠标/耳机/键盘/摄像头是否完整'},{step:'检查主副屏配置是否正确'},{step:'确认大屏为主显示器'}],scripts:[],transferCondition:'设备故障联系技术支持',notes:'设备完整性直接影响工作质量',needReport:false},
+            {id:'prep-camera',title:'调整摄像头角度',risk:'low',tags:['设备','准备'],keywords:['摄像头','角度','居中','微笑'],criteria:'上线前调整',flow:[{step:'打开Photo Booth查看画面'},{step:'调整摄像头保持人物居中'},{step:'保持微笑服务状态'}],scripts:[],transferCondition:'无',notes:'摄像头画面会展示给顾客，需保持专业形象',needReport:false},
+            {id:'prep-microphone',title:'调整麦克风音量',risk:'low',tags:['设备','准备'],keywords:['麦克风','音量','输入'],criteria:'上线前调整',flow:[{step:'打开系统设置-声音'},{step:'点击输入，选择对应耳机/麦克风'},{step:'将输入音量拉到最大'}],scripts:[],transferCondition:'无',notes:'音量过小会导致顾客听不清',needReport:false},
+            {id:'prep-login',title:'软件登录',risk:'low',tags:['软件','准备'],keywords:['登录','工作台','后台'],criteria:'上线前登录',flow:[{step:'登录AI值守工作台'},{step:'登录客服后台'},{step:'确认账号密码正确'}],scripts:[],transferCondition:'登录失败联系技术支持',notes:'两个系统都需要登录',needReport:false},
+            {id:'prep-voice',title:'语音包录制',risk:'mid',tags:['语音','准备'],keywords:['语音包','录制','提交'],criteria:'首次上线必须录制',flow:[{step:'在上线界面点击复制链接'},{step:'使用企业微信连接公司内网'},{step:'按提示录制语音包'},{step:'试听确认无误后提交'}],scripts:[],transferCondition:'录制失败联系培训老师',notes:'只有10次录制机会，环境必须安静，声音不能低于20秒',needReport:false},
+            {id:'prep-offline',title:'下班/挂起/排休操作',risk:'low',tags:['操作','流程'],keywords:['下班','挂起','排休','离席'],criteria:'下班或临时离开时操作',flow:[{step:'按F键唤起控制台'},{step:'点击对应按钮（下班/挂起/排休）'},{step:'等待当前所有店铺接待完毕'},{step:'确认状态切换后方可离席'}],scripts:[],transferCondition:'无',notes:'点击后系统停止分配新店铺，但需处理完当前店铺',needReport:false}
           ]
         },
         {
-          id: 'ai-behavior',
-          name: '顾客行为干预',
-          icon: '👥',
-          desc: '不当行为制止、滞留处理、特殊情况应对',
+          id: 'ai-assignment',
+          name: '分配场景处理',
+          icon: '📋',
+          desc: '二线转交场景、系统分配场景的处理流程',
           scenarios: [
-            {id:'smoking',title:'顾客在店内吸烟',risk:'mid',tags:['主动服务','安全','禁止行为'],keywords:['吸烟','抽烟','点烟','打火机'],criteria:'发现顾客在店内吸烟',flow:[{step:'立即介入制止'},{step:'使用标准话术提醒'}],scripts:[{label:'制止话术',text:'本店禁止吸烟，请您将香烟熄灭至店外，感谢您的配合。'}],transferCondition:'顾客拒不配合则转二线',notes:'',identifyTips:['顾客手持香烟','闻到烟味','看到烟雾'],needReport:false},
-            {id:'long-stay',title:'顾客长时间在店',risk:'low',tags:['主动服务','滞留'],keywords:['长时间','一直在','不走','滞留','待很久'],criteria:'顾客在店超过正常购物时间',flow:[{role:'客服',step:'主动询问顾客诉求'},{role:'客服',step:'根据回复进行相应处理'}],scripts:[{label:'询问话术',text:'请问有什么可以帮到您的？'}],transferCondition:'顾客有特殊需求则转二线',notes:'',needReport:false},
-            {id:'child-pet',title:'顾客携带儿童/宠物进店',risk:'low',tags:['主动服务','安全'],keywords:['小孩','儿童','宠物','狗','猫','宝宝'],criteria:'发现儿童或宠物进店',flow:[{step:'及时介入提醒'}],scripts:[{label:'儿童提醒',text:'请您看顾好您的小朋友，避免磕伤碰伤。'},{label:'宠物提醒',text:'本店禁止宠物入内，请将宠物带离至店外。'}],transferCondition:'无需转人工',notes:'',needReport:false}
+            {id:'assign-merchant',title:'二线转交：商家/店员在店',risk:'low',tags:['转交','低风险'],keywords:['商家','店员','在店','已核实'],criteria:'二线已核实身份的商家/店员在店',flow:[{step:'接管持续看守'},{step:'商家/店员提出需求时及时响应'},{step:'商家/店员离店后释放店铺'}],scripts:[{label:'商家提问',text:'您可在微店24APP内反馈一下会有专业人员帮您处理或拨打店门上张贴的400官方电话反馈'}],transferCondition:'无',notes:'已核实身份属于可信人员，低风险场景',needReport:false},
+            {id:'assign-rest',title:'二线转交：店内滞留/休息人群',risk:'low',tags:['转交','低风险'],keywords:['滞留','休息','休息区'],criteria:'商家允许顾客休息且店内设有休息区',flow:[{step:'接管持续看守'},{step:'监控休息区动态'},{step:'顾客有需求时及时响应'}],scripts:[{label:'询问',text:'请问有什么可以帮到您的？'}],transferCondition:'无',notes:'正常经营范围内的非购物滞留',needReport:false},
+            {id:'assign-abnormal',title:'系统分配-AI识别异常',risk:'high',tags:['系统分配','异常'],keywords:['标红','预警','异常','误报'],criteria:'AI识别结果为异常，工作台标红预警',flow:[{step:'紧急识别异常做出判断'},{step:'确认异常-转接二线客服'},{step:'确认无异常-点击"误报"按钮'},{step:'按常规流程正常值守'}],scripts:[],transferCondition:'确认异常立即转二线',notes:'AI可能误报，需人工二次判断',needReport:false},
+            {id:'assign-normal',title:'系统分配-AI识别无异常',risk:'low',tags:['系统分配','正常'],keywords:['无异常','正常值守','常规'],criteria:'AI识别结果为无异常',flow:[{step:'按常规流程正常接待'},{step:'根据场景选择介入方式'}],scripts:[],transferCondition:'发现异常转二线',notes:'分为完全介入、部分介入、直接转交三种情况',needReport:false}
           ]
         },
         {
-          id: 'ai-transfer',
-          name: '转交规范',
-          icon: '🔄',
-          desc: 'AI值守转交二线的判断标准与操作规范',
+          id: 'ai-intervention',
+          name: '客服介入判断',
+          icon: '🎯',
+          desc: '完全介入、部分介入、直接转交的场景分类',
           scenarios: [
-            {id:'transfer-full',title:'完全转交',risk:'low',tags:['转交','流程'],keywords:['完全转交','全部转交'],criteria:'AI无法处理需完全转交',flow:[{step:'判断是否属于完全转交场景'},{step:'复制店铺信息'},{step:'详细备注情况'},{step:'点击转交二线按钮'}],scripts:[],transferCondition:'AI完全无法处理的场景',notes:'包括：商家主动求助、设备故障、复杂纠纷等',needReport:false},
-            {id:'transfer-partial',title:'部分转交',risk:'low',tags:['转交','流程'],keywords:['部分转交','协助处理'],criteria:'AI处理后仍需二线介入',flow:[{step:'AI先行处理基础问题'},{step:'记录已处理内容'},{step:'备注需二线协助的具体事项'},{step:'转交二线'}],scripts:[],transferCondition:'AI已处理部分，剩余需人工',notes:'如：AI已引导支付，但顾客仍有疑问需解释',needReport:false},
-            {id:'transfer-direct',title:'直接转交',risk:'low',tags:['转交','流程'],keywords:['直接转交','立即转交'],criteria:'高风险场景需立即转交',flow:[{step:'识别高风险场景'},{step:'立即锁门（如需要）'},{step:'快速备注关键信息'},{step:'立即转交二线'}],scripts:[],transferCondition:'偷盗、少付、人身安全等高风险',notes:'争分夺秒，先转交再补充详情',needReport:true}
+            {id:'inter-full-ask',title:'完全介入：询问是否有人',risk:'low',tags:['完全介入','被动服务'],keywords:['有人吗','在吗','有没有人'],criteria:'顾客询问店内是否有人',flow:[{step:'及时响应'}],scripts:[{label:'响应',text:'请问有什么可以帮您？'}],transferCondition:'无',notes:'',needReport:false},
+            {id:'inter-full-identity',title:'完全介入：询问值班人员身份',risk:'low',tags:['完全介入','被动服务'],keywords:['谁在值守','真人吗','是机器人吗'],criteria:'顾客询问值班人员身份',flow:[{step:'及时响应'}],scripts:[{label:'响应',text:'是的，店铺都是真人在值守。'}],transferCondition:'无',notes:'',needReport:false},
+            {id:'inter-full-payment',title:'完全介入：询问付款方式',risk:'low',tags:['完全介入','被动服务'],keywords:['怎么付款','如何支付','付款方式'],criteria:'顾客询问付款方式',flow:[{step:'支付引导'}],scripts:[{label:'引导',text:'请您移步至收银台，将商品条形码对准扫码盒加购，加购完商品后，出示付款码对准扫码盒支付即可。'}],transferCondition:'无',notes:'',needReport:false},
+            {id:'inter-full-price',title:'完全介入：询问商品价格',risk:'low',tags:['完全介入','被动服务'],keywords:['多少钱','价格','怎么看价格'],criteria:'顾客询问商品价格',flow:[{step:'引导顾客扫描查看'}],scripts:[{label:'引导',text:'请将商品条形码对准扫码盒扫描即可看到价格。'}],transferCondition:'无',notes:'',needReport:false},
+            {id:'inter-full-door',title:'完全介入：协助开门离店',risk:'low',tags:['完全介入','主动服务'],keywords:['开门','出不去','门打不开'],criteria:'确认顾客未购物或购物流程无异常',flow:[{step:'开门'},{step:'引导顾客离店'}],scripts:[{label:'开门',text:'门已经帮您打开了，请携带好您的随身物品离店，期待您的下次光临'}],transferCondition:'无',notes:'严禁反向操作将店外人员放入',needReport:false},
+            {id:'inter-full-smoking',title:'完全介入：店内吸烟',risk:'mid',tags:['完全介入','主动服务'],keywords:['吸烟','抽烟','点烟'],criteria:'顾客在店内吸烟',flow:[{step:'及时介入制止'}],scripts:[{label:'制止',text:'本店禁止吸烟，请您将香烟熄灭至店外，感谢您的配合'}],transferCondition:'顾客拒不配合转二线',notes:'',needReport:false},
+            {id:'inter-full-check',title:'完全介入：核对商品数量',risk:'low',tags:['完全介入','主动服务'],keywords:['核对','几件','数量'],criteria:'顾客结算前核对商品',flow:[{step:'口头核实'},{step:'信任顾客'}],scripts:[{label:'核实',text:'请问您一共购买了几件商品？'}],transferCondition:'无',notes:'',needReport:false},
+            {id:'inter-full-multi',title:'完全介入：购买多件商品',risk:'low',tags:['完全介入','主动服务'],keywords:['多件','很多','六件以上'],criteria:'顾客购买六件及以上商品',flow:[{step:'利用利己心理提醒'}],scripts:[{label:'提醒',text:'为了避免您多付，请您一件一件扫码加购，核对好数量后，再进行付款。'}],transferCondition:'无',notes:'',needReport:false},
+            {id:'inter-full-stay',title:'完全介入：长时间在店',risk:'low',tags:['完全介入','主动服务'],keywords:['长时间','一直在','不走'],criteria:'顾客在店超过正常购物时长',flow:[{step:'询问诉求'}],scripts:[{label:'询问',text:'请问有什么可以帮到您的？'}],transferCondition:'顾客有特殊需求转二线',notes:'',needReport:false},
+            {id:'inter-full-express',title:'完全介入：取快递/团购',risk:'low',tags:['完全介入','主动服务'],keywords:['快递','团购','取货'],criteria:'顾客进店取快递或团购商品',flow:[{step:'询问确认'}],scripts:[{label:'询问',text:'请问您是来取快递/团购商品的吗？'}],transferCondition:'无',notes:'',needReport:false},
+            {id:'inter-full-child',title:'完全介入：携带儿童/宠物',risk:'low',tags:['完全介入','主动服务'],keywords:['小孩','儿童','宠物','狗','猫'],criteria:'顾客携带儿童或宠物进店',flow:[{step:'及时介入提醒'}],scripts:[{label:'儿童',text:'请您看顾好您的小朋友，避免磕伤碰伤'},{label:'宠物',text:'本店禁止宠物入内，请将宠物带离至店外'}],transferCondition:'无',notes:'',needReport:false},
+            {id:'inter-part-location',title:'部分介入：询问商品位置',risk:'low',tags:['部分介入'],keywords:['在哪','找不到','商品位置'],criteria:'顾客找不到目标商品',flow:[{step:'引导大致范围'},{step:'顾客未找到-致歉'},{step:'引导选购其他商品替代'}],scripts:[{label:'引导',text:'请您移步至XX用品区查看是否有您需要的商品。'},{label:'致歉',text:'实在抱歉，此类商品可能已经售空，您可以看一下店内是否有其他商品可以替代，或等店主到店后再来购买'}],transferCondition:'药店询问位置需转二线',notes:'',needReport:false},
+            {id:'inter-part-unpack',title:'部分介入：未支付商品拆封',risk:'mid',tags:['部分介入'],keywords:['拆封','拆包','打开'],criteria:'顾客未付款前拆开商品',flow:[{step:'立即介入提醒其付款'},{step:'顾客拒付或产生争议-备注转二线'}],scripts:[{label:'提醒',text:'请您先移步至收银台将商品扫码付款再进行使用。'},{label:'转交',text:'实在抱歉，客服帮您转接专员处理一下。'}],transferCondition:'顾客拒付转二线',notes:'',needReport:false},
+            {id:'inter-part-prize',title:'部分介入：商品兑奖',risk:'low',tags:['部分介入'],keywords:['兑奖','中奖','红牛','槟榔'],criteria:'顾客持中奖商品要求兑换',flow:[{step:'致歉表示无法兑奖'},{step:'顾客不认可-备注转二线'}],scripts:[{label:'致歉',text:'实在抱歉，云值守期间暂不支持兑奖，请您等到店员在店的时再进行兑奖。'},{label:'转交',text:'实在抱歉，客服帮您转接专员处理一下。'}],transferCondition:'顾客不认可转二线',notes:'',needReport:false},
+            {id:'inter-part-merchant',title:'部分介入：疑似商家/店员',risk:'mid',tags:['部分介入'],keywords:['商家','店员','老板'],criteria:'店内疑似商家或内部员工',flow:[{step:'初步识别'},{step:'转交二线核实身份'}],scripts:[{label:'询问',text:'请问您是商家/店员到店吗？'},{label:'引导',text:'请您在微店24APP反馈下，未避免多次核实，您可在微店24app内添加商家/店员手机号。帮您转接专员核实一下身份，请稍候。'}],transferCondition:'转二线核实',notes:'',needReport:false},
+            {id:'inter-part-fridge',title:'部分介入：冰箱门未关',risk:'low',tags:['部分介入'],keywords:['冰箱','没关','门开着'],criteria:'店内冰箱门长时间未关闭',flow:[{step:'顾客在店-引导提醒'},{step:'未响应/店内无顾客-备注转二线'}],scripts:[{label:'提醒',text:'辛苦您将店内的冰箱门关好，感谢您的配合。'}],transferCondition:'无人响应转二线',notes:'',needReport:false},
+            {id:'inter-direct-theft',title:'直接转交：偷盗',risk:'high',tags:['直接转交','资金安全'],keywords:['偷','盗','藏商品'],criteria:'发现偷盗行为',flow:[{step:'锁门'},{step:'复制店铺信息'},{step:'备注详情'},{step:'转交二线'},{step:'上报班长'}],scripts:[],transferCondition:'立即转二线+上报班长',notes:'店内小型偷盗需锁门，倚门盗抢不锁门',needReport:true},
+            {id:'inter-direct-underpay',title:'直接转交：少付/漏付',risk:'high',tags:['直接转交','资金安全'],keywords:['少付','漏付','没付全'],criteria:'实际支付少于应付',flow:[{step:'锁门'},{step:'转交二线'}],scripts:[],transferCondition:'立即转二线+锁门',notes:'常发生在购买多件商品时',needReport:true},
+            {id:'inter-direct-overpay',title:'直接转交：多付',risk:'mid',tags:['直接转交','资金安全'],keywords:['多付','重复支付','扣了两次'],criteria:'订单重复支付或商品重复扫码',flow:[{step:'备注信息'},{step:'转交二线'}],scripts:[],transferCondition:'转二线处理',notes:'',needReport:false},
+            {id:'inter-direct-damage',title:'直接转交：商品破损',risk:'mid',tags:['直接转交'],keywords:['破损','打碎','弄坏'],criteria:'顾客因个人原因造成商品破损',flow:[{step:'锁门'},{step:'备注信息'},{step:'转交二线'}],scripts:[],transferCondition:'转二线处理',notes:'',needReport:false},
+            {id:'inter-direct-bag',title:'直接转交：购物袋',risk:'low',tags:['直接转交'],keywords:['购物袋','袋子','塑料袋'],criteria:'涉及购物袋使用相关事件',flow:[{step:'确认需求'},{step:'转二线'}],scripts:[{label:'统一',text:'这边为您转接专员处理，请您稍等。'}],transferCondition:'转二线处理',notes:'',needReport:false},
+            {id:'inter-direct-nocode',title:'直接转交：购买无码商品',risk:'mid',tags:['直接转交','顾客需求'],keywords:['无码','没有条码','扫不出来'],criteria:'散装称重/生鲜/未录入商品',flow:[{step:'确认需求'},{step:'转二线'}],scripts:[{label:'统一',text:'这边为您转接专员处理，请您稍等。'}],transferCondition:'转二线处理',notes:'',needReport:false},
+            {id:'inter-direct-activity',title:'直接转交：询问店内活动',risk:'low',tags:['直接转交','顾客需求'],keywords:['活动','满减','赠品','积分'],criteria:'捆绑售卖/积分/金币/储值卡/满减/赠品',flow:[{step:'确认需求'},{step:'转二线'}],scripts:[{label:'统一',text:'这边为您转接专员处理，请您稍等。'}],transferCondition:'转二线处理',notes:'',needReport:false},
+            {id:'inter-direct-device',title:'直接转交：使用店内设备',risk:'mid',tags:['直接转交','顾客需求'],keywords:['烧水壶','微波炉','设备'],criteria:'使用具有一定风险的设备设施',flow:[{step:'确认需求'},{step:'转二线'}],scripts:[{label:'统一',text:'这边为您转接专员处理，请您稍等。'}],transferCondition:'转二线处理',notes:'',needReport:false},
+            {id:'inter-direct-nonpos',title:'直接转交：非POS机付款',risk:'mid',tags:['直接转交','顾客需求'],keywords:['扫商家码','收银机','转账','现金'],criteria:'扫描商家二维码/店内收银机/转账/现金支付',flow:[{step:'确认需求'},{step:'转二线'}],scripts:[{label:'统一',text:'这边为您转接专员处理，请您稍等。'}],transferCondition:'转二线处理',notes:'',needReport:false},
+            {id:'inter-direct-feedback',title:'直接转交：二次进店反馈',risk:'mid',tags:['直接转交','顾客需求'],keywords:['上次','之前','没付款','多付了'],criteria:'上次进店未付款/多付款/商品有问题/更换商品',flow:[{step:'确认需求'},{step:'转二线'}],scripts:[{label:'统一',text:'这边为您转接专员处理，请您稍等。'}],transferCondition:'转二线处理',notes:'',needReport:false}
+          ]
+        },
+        {
+          id: 'ai-special',
+          name: '特殊人群识别',
+          icon: '👤',
+          desc: '未成年购烟、骑手、制服人员、醉酒顾客的识别与处理',
+          scenarios: [
+            {id:'special-minor',title:'未成年购烟识别',risk:'high',tags:['特殊人群','合规'],keywords:['未成年','学生','买烟','香烟'],criteria:'疑似未成年人购买香烟',flow:[{step:'立即锁门（L键）'},{step:'转接人工'},{step:'情况备注'}],scripts:[{label:'统一话术',text:'云值守期间本店不向未成年人出售香烟。'}],transferCondition:'立即转二线',notes:'宁可错杀，不可放过！违法行为必须拦截',identifyTips:['穿着：校服/运动队服/背书包/携带课本/佩戴学生证','时间：上学时段（15-17点）/深夜独自逗留/多人同行','行为：眼神躲闪/不敢直视/说不出品牌名称/要求"最便宜的烟"','外貌：身高体型矮小瘦弱/面部稚嫩/皮肤细腻/有青春痘/未长胡须或胡须稀疏'],needReport:true},
+            {id:'special-rider',title:'外卖骑手识别',risk:'low',tags:['特殊人群'],keywords:['骑手','外卖','美团','取货'],criteria:'外卖配送人员进店',flow:[{step:'主动询问来意'},{step:'个人购物-正常引导'},{step:'取货配送-备注转二线'}],scripts:[{label:'询问',text:'请问您是来购物还是取外卖订单？'}],transferCondition:'取货转二线',notes:'可通过观察行为或直接询问区分身份',needReport:false},
+            {id:'special-uniform',title:'制服人员识别',risk:'high',tags:['特殊人群','执法'],keywords:['制服','执法','检查','工商','市场监管'],criteria:'穿着制服人员进店',flow:[{step:'主动询问来意'},{step:'个人购物-正常引导'},{step:'公务检查-优先表明真人身份'},{step:'立即转交人工+备注'}],scripts:[{label:'询问',text:'请问您是来购物还是有其他事项？'}],transferCondition:'公务检查立即转二线',notes:'执法、检查、市政等制服人员',needReport:false},
+            {id:'special-drunk',title:'醉酒顾客处理',risk:'high',tags:['特殊人群','安全'],keywords:['醉酒','喝醉','闹事','冲突'],criteria:'顾客醉酒状态下言语冲突或破坏物品',flow:[{step:'备注情况'},{step:'转接二线'}],scripts:[],transferCondition:'立即转二线',notes:'',needReport:false},
+            {id:'special-merchant-verify',title:'商家/店员身份核实',risk:'mid',tags:['特殊人群'],keywords:['商家','店员','老板','员工'],criteria:'非普通顾客身份人员进店',flow:[{step:'直接转接二线'},{step:'由二线核实身份'},{step:'核实后进行后续处理'}],scripts:[],transferCondition:'直接转二线核实',notes:'',needReport:false}
           ]
         }
       ]
