@@ -247,13 +247,14 @@ function showCategory(catId) {
 }
 
 // ── Scenario Detail ────────────────────────────────────────
-function showScenario(catId, scenarioId) {
+function showScenario(catId, scenarioId, skipMarkSeen = false) {
   state.currentCategory = catId;
   state.currentScenario = scenarioId;
-  // 标记该场景更新为已读
-  const seen = JSON.parse(localStorage.getItem('kb_updates_seen') || '{}');
-  seen[scenarioId] = Date.now();
-  localStorage.setItem('kb_updates_seen', JSON.stringify(seen));
+  if (!skipMarkSeen) {
+    const seen = JSON.parse(localStorage.getItem('kb_updates_seen') || '{}');
+    seen[scenarioId] = Date.now();
+    localStorage.setItem('kb_updates_seen', JSON.stringify(seen));
+  }
   document.getElementById('search-results').className = '';
   document.getElementById('category-view').style.display = 'none';
   const data = getData();
@@ -497,7 +498,7 @@ function saveScenario() {
   delete seen[scenarioId];
   localStorage.setItem('kb_updates_seen', JSON.stringify(seen));
   closeAdminPanel();
-  showScenario(catId, scenarioId);
+  showScenario(catId, scenarioId, true);
 }
 
 function closeAdminPanel() {
