@@ -395,6 +395,12 @@ function addScenario() {
   };
   cat.scenarios.push(newScen);
   saveData(data, { op: 'add', desc: `新增场景：${title}`, catName: cat.name, catId, scenarioId: newScen.id, after: newScen });
+  const updList = JSON.parse(localStorage.getItem('kb_updates') || '[]');
+  updList.unshift({catId, scenarioId: newScen.id, title: newScen.title, time: Date.now()});
+  localStorage.setItem('kb_updates', JSON.stringify(updList.slice(0, 50)));
+  const seenUpd = JSON.parse(localStorage.getItem('kb_updates_seen') || '{}');
+  delete seenUpd[newScen.id];
+  localStorage.setItem('kb_updates_seen', JSON.stringify(seenUpd));
   renderSidebar();
   alert('新增成功！');
   showTab('knowledge');
@@ -469,7 +475,13 @@ function saveEdit(catId, scenId) {
   s.transferCondition = document.getElementById('m-transfer').value.trim();
   s.notes = document.getElementById('m-notes').value.trim();
   const diffs = diffScenario(before, s);
-  saveData(data, { op:'edit', desc:`编辑场景：${s.title}`, catName: cat.name, catId, scenarioId, before, after: s, diffs });
+  saveData(data, { op:'edit', desc:`编辑场景：${s.title}`, catName: cat.name, catId, scenarioId: scenId, before, after: s, diffs });
+  const updList2 = JSON.parse(localStorage.getItem('kb_updates') || '[]');
+  updList2.unshift({catId, scenarioId: scenId, title: s.title, time: Date.now()});
+  localStorage.setItem('kb_updates', JSON.stringify(updList2.slice(0, 50)));
+  const seenUpd2 = JSON.parse(localStorage.getItem('kb_updates_seen') || '{}');
+  delete seenUpd2[scenId];
+  localStorage.setItem('kb_updates_seen', JSON.stringify(seenUpd2));
   closeModal();
   renderSidebar();
   renderKnowledge();
