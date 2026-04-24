@@ -73,25 +73,46 @@ function getFilteredCategories() {
 
 // ── Nav Tree ──────────────────────────────────────────────
 function renderNav(filter) {
-  const cats = getFilteredCategories();
+  const data = getData();
   const seen = JSON.parse(localStorage.getItem('kb_updates_seen') || '{}');
   const tree = document.getElementById('nav-tree');
-  tree.innerHTML = cats.map(cat => {
-    const scenarios = filter
-      ? cat.scenarios.filter(s => matchSearch(s, filter))
-      : cat.scenarios;
-    if (filter && !scenarios.length) return '';
-    const hasUpdate = !seen[cat.id];
-    return `<div class="nav-l1 ${state.currentCategory===cat.id?'open':''}" id="nav-${cat.id}">
-      <div class="nav-l1-label" onclick="toggleNav('${cat.id}')">
-        <span class="arrow">▶</span>
-        <span class="nav-l1-icon">${cat.icon}</span>
-        <span>${cat.name}</span>
-        ${hasUpdate?'<span class="update-badge">有更新</span>':''}
+
+  let modules;
+  if (state.activeModule === 'all') {
+    modules = data.modules;
+  } else {
+    const m = data.modules.find(m => m.id === state.activeModule);
+    modules = m ? [m] : [];
+  }
+
+  tree.innerHTML = modules.map(mod => {
+    const cats = mod.categories.map(cat => {
+      const scenarios = filter
+        ? cat.scenarios.filter(s => matchSearch(s, filter))
+        : cat.scenarios;
+      if (filter && !scenarios.length) return '';
+      const hasUpdate = !seen[cat.id];
+      return `<div class="nav-l1 ${state.currentCategory===cat.id?'open':''}" id="nav-${cat.id}">
+        <div class="nav-l1-label" onclick="toggleNav('${cat.id}')">
+          <span class="arrow">▶</span>
+          <span class="nav-l1-icon">${cat.icon}</span>
+          <span>${cat.name}</span>
+          ${hasUpdate?'<span class="update-badge">有更新</span>':''}
+        </div>
+        <div class="nav-l2-list">
+          ${scenarios.map(s => `<div class="nav-l2 ${state.currentScenario===s.id?'active':''}" onclick="showScenario('${cat.id}','${s.id}')">${s.title}</div>`).join('')}
+        </div>
+      </div>`;
+    }).join('');
+    if (filter && !cats.replace(/\s/g,'')) return '';
+    const totalScenarios = mod.categories.reduce((n,c)=>n+c.scenarios.length,0);
+    return `<div class="nav-module">
+      <div class="nav-module-title">
+        <span class="nav-module-icon">${mod.icon}</span>
+        <span>${mod.name}</span>
+        <span class="nav-module-count">${totalScenarios}</span>
       </div>
-      <div class="nav-l2-list">
-        ${scenarios.map(s => `<div class="nav-l2 ${state.currentScenario===s.id?'active':''}" onclick="showScenario('${cat.id}','${s.id}')">${s.title}</div>`).join('')}
-      </div>
+      ${cats}
     </div>`;
   }).join('');
 }
