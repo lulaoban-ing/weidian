@@ -94,40 +94,78 @@ const KB_DATA = {
       name: '值班店长专区',
       icon: '👔',
       color: 'warning',
-      desc: '值班店长专用：场景处理、顾客纠纷、特殊商品管理',
+      desc: '值班店长专用：工作准备、硬件认知、场景处理、安全问题',
       categories: [
         {
-          id: 'dm-payment',
-          name: '支付与结算',
-          icon: '💳',
-          desc: '多付、少付、支付异常、退款处理',
+          id: 'dm-preparation',
+          name: '工作准备与系统操作',
+          icon: '⚙️',
+          desc: '上线准备、系统登录、后台操作、店铺管理',
           scenarios: [
-            {id:'overpay',title:'顾客多付款',risk:'mid',tags:['支付','退款'],keywords:['多付','多扣','付多了','退钱'],criteria:'顾客实际支付超过商品金额',flow:[{step:'核实支付记录'},{step:'联系商家确认退款'},{step:'告知顾客退款时效'}],scripts:[{label:'安抚',text:'您好，我们已核实您的支付情况，会联系商家在1-3个工作日内退还多付金额，请您放心。'}],transferCondition:'商家不配合退款则上报班长',notes:'',needReport:false},
-            {id:'ask-payment',title:'顾客询问支付方式',risk:'low',tags:['支付','引导'],keywords:['怎么付','如何支付','付款方式','扫码'],criteria:'顾客不知道如何支付',flow:[{step:'引导顾客扫描POS机二维码'},{step:'确认支付成功后开门'}],scripts:[{label:'引导',text:'您好，请扫描收银台上的二维码进行支付，支付成功后门会自动打开。'}],transferCondition:'无需转人工',notes:'',needReport:false},
-            {id:'pos-breakdown',title:'POS机故障',risk:'high',tags:['设备','支付'],keywords:['POS坏了','收银机','刷卡机','不能付款'],criteria:'POS机无法正常使用',flow:[{step:'引导顾客使用备用支付方式'},{step:'备注故障情况'},{step:'通知商家处理设备'}],scripts:[{label:'引导',text:'非常抱歉，收银设备暂时出现故障，请您使用手机扫码支付，给您带来不便深表歉意。'}],transferCondition:'无法解决立即转二线',notes:'',needReport:true},
-            {id:'refund-request',title:'顾客要求退款',risk:'mid',tags:['退款','售后'],keywords:['退款','退钱','不想要了'],criteria:'顾客购买后要求退款',flow:[{step:'了解退款原因'},{step:'核实购买记录'},{step:'联系商家处理'}],scripts:[{label:'受理',text:'您好，请问您需要退款的原因是什么？我们会帮您联系商家处理。'}],transferCondition:'商家拒绝退款则上报班长',notes:'',needReport:false}
+            {id:'dm-prep-device',title:'上线前设备检查',risk:'low',tags:['设备','准备'],keywords:['设备','检查','鼠标','耳机','键盘'],criteria:'每次上线前必须检查',flow:[{step:'检查鼠标/耳机/键盘是否完整'},{step:'检查主副屏配置是否正确'},{step:'确认网络连接正常'}],scripts:[],transferCondition:'设备故障联系技术支持',notes:'设备完整性直接影响工作质量',needReport:false},
+            {id:'dm-prep-login',title:'系统登录与工作台',risk:'low',tags:['系统','登录'],keywords:['登录','工作台','后台','云值守'],criteria:'上线前登录',flow:[{step:'登录值班店长工作台'},{step:'登录云值守后台'},{step:'确认账号权限正常'}],scripts:[],transferCondition:'登录失败联系技术支持',notes:'需同时登录工作台和后台系统',needReport:false},
+            {id:'dm-backend-shop',title:'后台-店铺管理',risk:'low',tags:['后台','店铺'],keywords:['店铺管理','店铺ID','值守记录','商品查询'],criteria:'需要查询店铺信息时',flow:[{step:'输入店铺ID点击详情'},{step:'查看店铺基本信息'},{step:'查看值守记录/分配快照'},{step:'商品查询输入商品名称'}],scripts:[],transferCondition:'无',notes:'可查询店铺值守记录、商品价格、货架码',needReport:false},
+            {id:'dm-backend-check',title:'后台-稽查单',risk:'mid',tags:['后台','稽查'],keywords:['稽查单','打标','事件详情'],criteria:'需要查询或修改打标信息时',flow:[{step:'输入稽查单ID'},{step:'查看事件详情'},{step:'点击"更新打标信息"修改内容'},{step:'完善事件信息'}],scripts:[],transferCondition:'无',notes:'客服侧可修改打标内容完善事件信息',needReport:false},
+            {id:'dm-offline',title:'下班/挂起/排休操作',risk:'low',tags:['操作','流程'],keywords:['下班','挂起','排休','离席'],criteria:'下班或临时离开时操作',flow:[{step:'按F键唤起控制台'},{step:'点击对应按钮（下班/挂起/排休）'},{step:'等待当前所有店铺接待完毕'},{step:'确认状态切换后方可离席'}],scripts:[],transferCondition:'无',notes:'点击后系统停止分配新店铺，但需处理完当前店铺',needReport:false}
           ]
         },
         {
-          id: 'dm-special',
-          name: '特殊商品管理',
-          icon: '🚬',
-          desc: '香烟、酒类、处方药等特殊商品的销售管控',
+          id: 'dm-hardware',
+          name: '硬件设备认知',
+          icon: '🖥️',
+          desc: 'POS机、门禁、监控、收银系统等硬件设备知识',
           scenarios: [
-            {id:'alcohol-minor',title:'未成年购买酒类',risk:'high',tags:['特殊人群','合规'],keywords:['未成年','学生','买酒'],criteria:'疑似未成年购买酒类',flow:[{step:'主动介入询问年龄'},{step:'要求出示身份证'},{step:'未满18岁拒绝售卖'}],scripts:[{label:'询问',text:'您好，购买酒类需��年满18周岁，请问您满18岁了吗？请出示您的身份证。'}],transferCondition:'顾客拒不配合转二线',notes:'',identifyTips:['穿校服','背书包','身高矮小','面部稚嫩'],needReport:false},
-            {id:'prescription-drug',title:'购买处方药',risk:'high',tags:['合规','处方药'],keywords:['处方药','需要处方','开方'],criteria:'顾客购买需处方的药品',flow:[{step:'询问是否有处方'},{step:'无处方拒绝售卖'},{step:'引导去医院开具处方'}],scripts:[{label:'拒绝',text:'您好，该药品属于处方药，需要凭医生处方才能购买，请您前往医院就诊后凭处方购买。'}],transferCondition:'顾客坚持购买转二线',notes:'',needReport:false},
-            {id:'no-barcode',title:'无条码商品',risk:'mid',tags:['商品','结算'],keywords:['没有条码','扫不出来','无码'],criteria:'商品无法扫码结算',flow:[{step:'引导顾客在购物车手动添加'},{step:'联系商家确认价格'},{step:'协助完成结算'}],scripts:[{label:'引导',text:'您好，该商品暂时无法扫码，请您在购物车中手动搜索添加，或联系我们协助处理。'}],transferCondition:'无法处理转二线',notes:'',needReport:false}
+            {id:'dm-hw-pos',title:'POS机/收银系统',risk:'mid',tags:['硬件','收银'],keywords:['POS机','收银机','扫码','支付'],criteria:'POS机相关问题',flow:[{step:'了解POS机基本功能：扫码支付、商品管理、库存同步'},{step:'故障时引导顾客使用备用支付方式'},{step:'通知商家处理设备'}],scripts:[{label:'故障引导',text:'非常抱歉，收银设备暂时出现故障，请您使用手机扫码支付，给您带来不便深表歉意。'}],transferCondition:'无法解决立即转二线',notes:'POS机整合支付、销售、库存管理',needReport:true},
+            {id:'dm-hw-door',title:'门禁系统',risk:'high',tags:['硬件','门禁'],keywords:['门禁','开门','关门','进出口'],criteria:'门禁相关问题',flow:[{step:'了解门禁功能：智能管控进出口、安全与营业状态联动'},{step:'远程尝试开门'},{step:'核实支付状态'},{step:'通知商家或维修'}],scripts:[{label:'安抚',text:'非常抱歉，门禁系统出现异常，我们正在紧急处理，请您稍等片刻，感谢您的耐心等待。'}],transferCondition:'立即转二线处理',notes:'门禁异常属于高风险事件',needReport:true},
+            {id:'dm-hw-monitor',title:'监控系统',risk:'mid',tags:['硬件','监控'],keywords:['监控','摄像头','AI识别','视频'],criteria:'监控系统相关',flow:[{step:'了解监控功能：AI视觉分析、实时监控、监控回放'},{step:'监控异常时通知技术支持'},{step:'利用监控数据辅助决策'}],scripts:[],transferCondition:'监控故障联系技术支持',notes:'监控系统将视频数据转化为运营决策依据',needReport:false},
+            {id:'dm-hw-integration',title:'三大系统联动',risk:'low',tags:['硬件','系统'],keywords:['门禁','监控','收银','联动','整合'],criteria:'了解系统整体架构',flow:[{step:'门禁系统：管控进出口'},{step:'监控系统：AI视觉分析'},{step:'收银系统：支付与库存管理'},{step:'三大系统数据实时同步'}],scripts:[],transferCondition:'无',notes:'三大系统形成完整的智能零售解决方案',needReport:false}
           ]
         },
         {
-          id: 'dm-dispute',
-          name: '顾客纠纷处理',
-          icon: '⚖️',
-          desc: '投诉、纠纷、顾客不满的处理流程',
+          id: 'dm-normal',
+          name: '常规场景处理',
+          icon: '📋',
+          desc: '支付、商品、退款等日常高频场景',
           scenarios: [
-            {id:'customer-complaint',title:'顾客投诉服务',risk:'mid',tags:['投诉','服务'],keywords:['投诉','不满意','服务差','要投诉'],criteria:'顾客对服务不满意',flow:[{step:'耐心倾听顾客诉求'},{step:'表达歉意'},{step:'提出解决方案'},{step:'必要时上报班长'}],scripts:[{label:'受理',text:'非常抱歉给您带来不好的体验，请您告诉我具体情况，我们会尽力为您解决。'}],transferCondition:'无法解决上报班长',notes:'',needReport:false},
-            {id:'door-not-open',title:'门无法打开',risk:'high',tags:['设备','门禁'],keywords:['门打不开','出不去','进不来','门坏了'],criteria:'门禁系统异常无法开关门',flow:[{step:'核实支付状态'},{step:'远程尝试开门'},{step:'通知商家或维修'},{step:'安抚顾客等待'}],scripts:[{label:'安抚',text:'非常抱歉，门禁系统出现异常，我们正在紧急处理，请您稍等片刻，感谢您的耐心等待。'}],transferCondition:'立即转二线处理',notes:'',needReport:true},
-            {id:'price-dispute',title:'商品价格争议',risk:'mid',tags:['价格','纠纷'],keywords:['价格不对','标价','贵了','价格错误'],criteria:'顾客对商品价格有异议',flow:[{step:'核实商品实际价格'},{step:'联系商家确认'},{step:'按实际价格处理'}],scripts:[{label:'核实',text:'您好，我来帮您核实一下该商品的价格，请稍等。'}],transferCondition:'价格差异较大联系商家',notes:'',needReport:false}
+            {id:'dm-ask-payment',title:'顾客询问支付方式',risk:'low',tags:['支付','引导'],keywords:['怎么付','如何支付','付款方式','扫码'],criteria:'顾客不知道如何支付',flow:[{step:'引导顾客扫描POS机二维码'},{step:'确认支付成功后开门'}],scripts:[{label:'引导',text:'您好，请扫描收银台上的二维码进行支付，支付成功后门会自动打开。'}],transferCondition:'无需转人工',notes:'',needReport:false},
+            {id:'dm-overpay',title:'顾客多付款',risk:'mid',tags:['支付','退款'],keywords:['多付','多扣','付多了','退钱'],criteria:'顾客实际支付超过商品金额',flow:[{step:'核实支付记录'},{step:'联系商家确认退款'},{step:'告知顾客退款时效'}],scripts:[{label:'安抚',text:'您好，我们已核实您的支付情况，会联系商家在1-3个工作日内退还多付金额，请您放心。'}],transferCondition:'商家不配合退款则上报班长',notes:'',needReport:false},
+            {id:'dm-underpay',title:'顾客少付款',risk:'mid',tags:['支付','补款'],keywords:['少付','漏付','没付够'],criteria:'顾客实际支付低于商品金额',flow:[{step:'核实支付记录与商品'},{step:'告知顾客需补足差额'},{step:'引导补款'}],scripts:[{label:'告知',text:'您好，您购买的商品总价为XX元，目前支付了XX元，还需补足XX元，请您配合完成支付。'}],transferCondition:'拒绝补款锁门转二线',notes:'',needReport:false},
+            {id:'dm-refund',title:'顾客要求退款',risk:'mid',tags:['退款','售后'],keywords:['退款','退钱','不想要了'],criteria:'顾客购买后要求退款',flow:[{step:'了解退款原因'},{step:'核实购买记录'},{step:'联系商家处理'}],scripts:[{label:'受理',text:'您好，请问您需要退款的原因是什么？我们会帮您联系商家处理。'}],transferCondition:'商家拒绝退款则上报班长',notes:'',needReport:false},
+            {id:'dm-no-barcode',title:'无条码商品',risk:'mid',tags:['商品','结算'],keywords:['没有条码','扫不出来','无码'],criteria:'商品无法扫码结算',flow:[{step:'引导顾客在购物车手动添加'},{step:'联系商家确认价格'},{step:'协助完成结算'}],scripts:[{label:'引导',text:'您好，该商品暂时无法扫码，请您在购物车中手动搜索添加，或联系我们协助处理。'}],transferCondition:'无法处理转二线',notes:'',needReport:false},
+            {id:'dm-price-dispute',title:'商品价格争议',risk:'mid',tags:['价格','纠纷'],keywords:['价格不对','标价','贵了','价格错误'],criteria:'顾客对商品价格有异议',flow:[{step:'核实商品实际价格'},{step:'联系商家确认'},{step:'按实际价格处理'}],scripts:[{label:'核实',text:'您好，我来帮您核实一下该商品的价格，请稍等。'}],transferCondition:'价格差异较大联系商家',notes:'',needReport:false},
+            {id:'dm-complaint',title:'顾客投诉服务',risk:'mid',tags:['投诉','服务'],keywords:['投诉','不满意','服务差','要投诉'],criteria:'顾客对服务不满意',flow:[{step:'耐心倾听顾客诉求'},{step:'表达歉意'},{step:'提出解决方案'},{step:'必要时上报班长'}],scripts:[{label:'受理',text:'非常抱歉给您带来不好的体验，请您告诉我具体情况，我们会尽力为您解决。'}],transferCondition:'无法解决上报班长',notes:'',needReport:false}
+          ]
+        },
+        {
+          id: 'dm-abnormal',
+          name: '非常规场景处理',
+          icon: '⚠️',
+          desc: '特殊商品、设备故障、纠纷等复杂场景',
+          scenarios: [
+            {id:'dm-minor-cigarette',title:'未成年购买香烟',risk:'high',tags:['特殊人群','合规'],keywords:['未成年','学生','买烟','香烟'],criteria:'疑似未成年购买香烟',flow:[{step:'主动介入询问年龄'},{step:'要求出示身份证'},{step:'未满18岁拒绝售卖并锁门'}],scripts:[{label:'询问',text:'您好，购买香烟需要年满18周岁，请问您满18岁了吗？请出示您的身份证。'},{label:'拒绝',text:'非常抱歉，根据国家规定，未满18周岁不能购买香烟，请您理解。'}],transferCondition:'顾客拒不配合转二线',notes:'',identifyTips:['穿校服','背书包','身高矮小','面部稚嫩'],needReport:true},
+            {id:'dm-minor-alcohol',title:'未成年购买酒类',risk:'high',tags:['特殊人群','合规'],keywords:['未成年','学生','买酒'],criteria:'疑似未成年购买酒类',flow:[{step:'主动介入询问年龄'},{step:'要求出示身份证'},{step:'未满18岁拒绝售卖'}],scripts:[{label:'询问',text:'您好，购买酒类需要年满18周岁，请问您满18岁了吗？请出示您的身份证。'}],transferCondition:'顾客拒不配合转二线',notes:'',identifyTips:['穿校服','背书包','身高矮小','面部稚嫩'],needReport:false},
+            {id:'dm-prescription',title:'购买处方药',risk:'high',tags:['合规','处方药'],keywords:['处方药','需要处方','开方'],criteria:'顾客购买需处方的药品',flow:[{step:'询问是否有处方'},{step:'无处方拒绝售卖'},{step:'引导去医院开具处方'}],scripts:[{label:'拒绝',text:'您好，该药品属于处方药，需要凭医生处方才能购买，请您前往医院就诊后凭处方购买。'}],transferCondition:'顾客坚持购买转二线',notes:'',needReport:false},
+            {id:'dm-pos-breakdown',title:'POS机故障',risk:'high',tags:['设备','支付'],keywords:['POS坏了','收银机','刷卡机','不能付款'],criteria:'POS机无法正常使用',flow:[{step:'引导顾客使用备用支付方式'},{step:'备注故障情况'},{step:'通知商家处理设备'}],scripts:[{label:'引导',text:'非常抱歉，收银设备暂时出现故障，请您使用手机扫码支付，给您带来不便深表歉意。'}],transferCondition:'无法解决立即转二线',notes:'',needReport:true},
+            {id:'dm-door-stuck',title:'门无法打开',risk:'high',tags:['设备','门禁'],keywords:['门打不开','出不去','进不来','门坏了'],criteria:'门禁系统异常无法开关门',flow:[{step:'核实支付状态'},{step:'远程尝试开门'},{step:'通知商家或维修'},{step:'安抚顾客等待'}],scripts:[{label:'安抚',text:'非常抱歉，门禁系统出现异常，我们正在紧急处理，请您稍等片刻，感谢您的耐心等待。'}],transferCondition:'立即转二线处理',notes:'',needReport:true},
+            {id:'dm-merchant-code',title:'商家码无法使用',risk:'mid',tags:['设备','支付'],keywords:['商家码','扫不了','二维码坏了'],criteria:'商家收款码无法扫描',flow:[{step:'引导使用POS机支付'},{step:'通知商家更换二维码'}],scripts:[{label:'引导',text:'您好，商家码暂时无法使用，请您使用收银台的POS机扫码支付。'}],transferCondition:'POS机也故障转二线',notes:'',needReport:false},
+            {id:'dm-damage-intent',title:'故意损坏商品',risk:'high',tags:['破坏','赔偿'],keywords:['故意摔','砸商品','故意破坏'],criteria:'顾客故意损坏商品',flow:[{step:'立即制止'},{step:'要求赔偿'},{step:'拒绝赔偿锁门转二线'}],scripts:[{label:'要求赔偿',text:'您好，您损坏了店内商品，需要按价赔偿，请您配合。'}],transferCondition:'拒绝赔偿立即转二线',notes:'',needReport:true},
+            {id:'dm-damage-accident',title:'意外损坏商品',risk:'mid',tags:['破坏','意外'],keywords:['不小心','意外','碰倒'],criteria:'顾客意外损坏商品',flow:[{step:'安抚顾客'},{step:'联系商家确认处理方式'}],scripts:[{label:'安抚',text:'没关系，我们来联系商家确认处理方式。'}],transferCondition:'按商家要求处理',notes:'',needReport:false}
+          ]
+        },
+        {
+          id: 'dm-safety',
+          name: '安全问题',
+          icon: '🚨',
+          desc: '偷盗、破坏、冲突、紧急事件等安全风险处理',
+          scenarios: [
+            {id:'dm-theft-unpaid',title:'未付款离店',risk:'high',tags:['偷盗','未付款'],keywords:['没付钱','未付款','直接走'],criteria:'顾客未付款试图离店',flow:[{step:'立即锁门'},{step:'提醒顾客完成支付'},{step:'拒不配合转二线'}],scripts:[{label:'提醒',text:'您好，您还没有完成支付，请先完成支付再离开，谢谢配合。'}],transferCondition:'拒不配合立即转二线',notes:'',needReport:true},
+            {id:'dm-theft-hide',title:'藏匿商品',risk:'high',tags:['偷盗','藏匿'],keywords:['藏','塞进包','放口袋','夹带'],criteria:'顾客将商品藏匿在身上或包内',flow:[{step:'锁门'},{step:'提醒顾客取出商品'},{step:'核对商品与支付'},{step:'拒不配合转二线'}],scripts:[{label:'提醒',text:'您好，请您将包内/身上的商品取出完成支付，谢谢配合。'}],transferCondition:'拒不配合立即转二线',notes:'',needReport:true},
+            {id:'dm-theft-barcode',title:'更换条码',risk:'high',tags:['偷盗','作弊'],keywords:['换条码','撕标签','贴别的码'],criteria:'顾客更换商品条码以低价结算',flow:[{step:'锁门'},{step:'指出作弊行为'},{step:'要求按实际价格支付'},{step:'拒不配合转二线'}],scripts:[{label:'指出',text:'您好，我们发现您更换了商品条码，请按商品实际价格支付，谢谢配合。'}],transferCondition:'拒不配合立即转二线',notes:'',needReport:true},
+            {id:'dm-conflict',title:'顾客冲突/打架',risk:'high',tags:['冲突','安全'],keywords:['打架','吵架','冲突','争执'],criteria:'店内发生顾客冲突',flow:[{step:'立即制止'},{step:'劝说双方冷静'},{step:'严重冲突报警'},{step:'转二线处理'}],scripts:[{label:'制止',text:'请大家冷静，有什么问题我们可以协商解决，请不要发生冲突。'}],transferCondition:'立即转二线，严重时报警',notes:'',needReport:true},
+            {id:'dm-drunk',title:'醉酒人员',risk:'high',tags:['特殊人群','安全'],keywords:['喝醉','醉酒','酒后'],criteria:'醉酒人员进店',flow:[{step:'密切监控'},{step:'防止破坏商品'},{step:'异常行为立即转二线'}],scripts:[{label:'提醒',text:'您好，请注意安全，小心商品。'}],transferCondition:'出现破坏行为立即转二线',notes:'',needReport:false},
+            {id:'dm-suspicious',title:'可疑人员',risk:'high',tags:['安全','可疑'],keywords:['可疑','鬼鬼祟祟','东张西望'],criteria:'行为异常的可疑人员',flow:[{step:'密切监控'},{step:'观察行为意图'},{step:'发现异常立即转二线'}],scripts:[],transferCondition:'发现异常立即转二线',notes:'',needReport:false},
+            {id:'dm-emergency',title:'突发紧急事件',risk:'high',tags:['紧急','安全'],keywords:['晕倒','受伤','急救','火灾','地震'],criteria:'店内发生紧急事件',flow:[{step:'立即转二线'},{step:'必要时报警/120'},{step:'通知商家'},{step:'协助处理'}],scripts:[],transferCondition:'立即转二线',notes:'人身安全第一优先',needReport:true},
+            {id:'dm-threat',title:'威胁/恐吓',risk:'high',tags:['安全','威胁'],keywords:['威胁','恐吓','报复','打你'],criteria:'顾客威胁或恐吓客服/商家',flow:[{step:'保持冷静'},{step:'记录威胁内容'},{step:'立即转二线'},{step:'必要时报警'}],scripts:[],transferCondition:'立即转二线',notes:'保护自身安全，必要时报警',needReport:true}
           ]
         }
       ]
